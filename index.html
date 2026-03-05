@@ -21,12 +21,18 @@
     </div>
   </div>
 
-  <!-- 名前入力画面 -->
+  <!-- 名前・性別入力画面 -->
   <div id="screen-create" class="screen">
     <div class="create-container">
-      <h2>あなたの名前は？</h2>
+      <h2>あなたは誰？</h2>
       <div class="create-section">
         <input type="text" id="player-name" placeholder="名前を入力" maxlength="10">
+      </div>
+      <div class="create-section gender-section">
+        <div class="gender-buttons">
+          <button class="gender-btn" data-gender="male">男性</button>
+          <button class="gender-btn" data-gender="female">女性</button>
+        </div>
       </div>
       <button id="btn-go-tutorial" class="menu-btn" disabled>次へ</button>
     </div>
@@ -137,6 +143,21 @@
         <button id="btn-close-evidence" class="menu-btn">閉じる</button>
       </div>
     </div>
+
+    <!-- パズルUI -->
+    <div id="puzzle-overlay" class="overlay">
+      <div class="puzzle-panel">
+        <div id="puzzle-text" class="puzzle-text"></div>
+        <div id="puzzle-clues" class="puzzle-clues"></div>
+        <div id="puzzle-hint" class="puzzle-hint"></div>
+        <div class="puzzle-input-area">
+          <input type="text" id="puzzle-input" class="puzzle-input" placeholder="答えを入力" autocomplete="off">
+          <button id="puzzle-submit" class="menu-btn puzzle-submit-btn">送信</button>
+        </div>
+        <div id="puzzle-attempts" class="puzzle-attempts"></div>
+        <div id="puzzle-feedback" class="puzzle-feedback"></div>
+      </div>
+    </div>
   </div>
 
   <!-- アクション画面 -->
@@ -167,11 +188,28 @@
     </div>
   </div>
 
+  <!-- ランク評価画面 -->
+  <div id="screen-rank" class="screen">
+    <div class="rank-container">
+      <div class="rank-header">── 知能ランク評価 ──</div>
+      <div id="rank-letter" class="rank-letter"></div>
+      <div id="rank-title" class="rank-title"></div>
+      <div id="rank-score-total" class="rank-score-total"></div>
+      <div id="rank-details" class="rank-details"></div>
+      <div class="rank-buttons">
+        <button id="btn-rank-replay" class="menu-btn">もう一度プレイしてランクアップ</button>
+        <button id="btn-rank-title" class="menu-btn">タイトルへ</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/sfx.js"></script>
   <script src="js/save.js"></script>
   <script src="js/engine.js"></script>
   <script src="js/action.js"></script>
   <script src="js/scenario-ch1.js"></script>
+  <script src="js/scenario-ch2.js"></script>
+  <script src="js/scenario-ch3.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

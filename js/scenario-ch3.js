@@ -1,0 +1,417 @@
+// ========== CHAPTER 3: 真相 ==========
+const Chapter3 = {
+  scenes: {
+
+    // ===== 場面1：火曜朝 — 佐藤の逮捕ニュース =====
+    ch3_scene1: {
+      chapterTitle: '第3章',
+      chapterSub: '真　　相',
+      location: '自宅',
+      time: '火曜日 7:00',
+      bg: 'bg-home-morning',
+      content: [
+        { type: 'narration', text: '火曜日の朝。\n目が覚めるとスマホが鳴り続けている。' },
+        { type: 'sfx', name: 'phoneRing' },
+        { type: 'narration', text: 'ニュース速報。\nそして山本からのメッセージ。' },
+        {
+          type: 'notification',
+          title: 'ニュース速報',
+          text: '□□商事 佐藤部長を横領容疑で逮捕',
+        },
+        { type: 'narration', text: '佐藤が逮捕された。\n横領の証拠が警察に渡ったのだ。' },
+        {
+          type: 'phone',
+          appName: '山本とのトーク',
+          messages: [
+            { from: 'other', text: 'ニュース見たか！佐藤が逮捕されたぞ！', time: '7:05', senderName: '山本' },
+            { from: 'player', text: 'ああ、見た。やっとだ', time: '7:06' },
+            { from: 'other', text: 'でも…田中を殺した犯人はまだ捕まってない', time: '7:08', senderName: '山本' },
+            { from: 'player', text: '……そうだな', time: '7:10' },
+          ],
+        },
+        { type: 'narration', text: '佐藤は横領の黒幕だった。\nだが田中を殺害した実行犯は\nまだ捕まっていない。' },
+        { type: 'narration', text: '黒田の言葉が蘇る。\n「実行犯が別にいる。\nそしてそいつはまだお前の近くにいるかもしれない」' },
+        { type: 'sfx', name: 'tensionSting' },
+        { type: 'narration', text: '自分の「近く」にいる人間。\n山本。鈴木。会社の同僚。\n\n……誰を信じればいい。' },
+      ],
+      next: 'ch3_scene2',
+    },
+
+    // ===== 場面2：火曜昼 — 黒田との作戦会議 =====
+    ch3_scene2: {
+      location: '喫茶店',
+      time: '火曜日 12:00',
+      bg: 'bg-cafe',
+      content: [
+        { type: 'narration', text: '黒田から連絡があった。\n「会って話がしたい」。' },
+        { type: 'narration', text: '駅から少し離れた古い喫茶店。\n黒田は奥の席で待っていた。' },
+        { type: 'text', speaker: '黒田', text: '佐藤の逮捕は知ってるな。\n横領については決定的な証拠が揃った。' },
+        { type: 'text', speaker: '黒田', text: 'だが田中殺害の件は\nまだ佐藤を起訴できていない。\n佐藤は「自分はやっていない」の一点張りだ。' },
+        { type: 'text', speaker: '{name}', text: '佐藤が殺したんじゃないんですか。' },
+        { type: 'text', speaker: '黒田', text: '俺もそう思っていた。\nだが調べれば調べるほど\n佐藤にはアリバイがある。' },
+        { type: 'effect', name: 'shake' },
+        { type: 'text', speaker: '黒田', text: '田中が殺された金曜の夜。\n佐藤は接待でホテルにいた。\n複数の証人がいる。' },
+        { type: 'narration', text: '佐藤にアリバイがある。\nということは──' },
+        { type: 'text', speaker: '黒田', text: '佐藤は指示を出した側だ。\n実行犯は別にいる。\n田中と近い人間で、佐藤に従う理由がある人間だ。' },
+        { type: 'narration', text: '黒田がファイルを開いた。\n田中の交友関係の図が描かれている。' },
+        { type: 'text', speaker: '黒田', text: 'プロファイリングをした。\n実行犯の条件はこうだ。' },
+        { type: 'text', speaker: '黒田', text: '一、田中のスマホを操作できるほど近しい。\n二、佐藤の命令に従う動機がある。\n三、金曜の夜のアリバイがない。' },
+        { type: 'narration', text: '三つの条件。\n頭の中で、知っている人間の顔を\n一人ずつ当てはめていく。' },
+      ],
+      choices: [
+        {
+          id: 'suspect_yamamoto',
+          text: '「山本が怪しい…」',
+          flags: { ch3_suspect: 'yamamoto' },
+          next: 'ch3_scene2_suspect',
+        },
+        {
+          id: 'suspect_suzuki',
+          text: '「鈴木かもしれない」',
+          flags: { ch3_suspect: 'suzuki' },
+          next: 'ch3_scene2_suspect',
+        },
+        {
+          id: 'suspect_unknown',
+          text: '「まだわからない」',
+          params: { investigation: 1 },
+          flags: { ch3_suspect: 'unknown' },
+          next: 'ch3_scene2_suspect',
+        },
+      ],
+    },
+
+    ch3_scene2_suspect: {
+      location: '喫茶店',
+      time: '火曜日 12:30',
+      bg: 'bg-cafe',
+      showTransition: false,
+      content: [
+        { type: 'text', speaker: '黒田', text: '焦るな。\n今の段階では推測でしかない。\nもう少し情報を集めよう。' },
+        { type: 'text', speaker: '黒田', text: '一つ気になることがある。\n佐藤の取り調べで奴が言ったんだ。' },
+        { type: 'text', speaker: '黒田', text: '「俺は確かに金を動かした。\nだが田中の件は知らない。\nあいつに聞け」' },
+        { type: 'text', speaker: '{name}', text: '「あいつ」……？' },
+        { type: 'text', speaker: '黒田', text: 'それ以上は黙った。\n弁護士が来てな。' },
+        { type: 'narration', text: '「あいつに聞け」\n\n佐藤が名指しを避けた「あいつ」とは誰だ。' },
+        { type: 'text', speaker: '黒田', text: '佐藤の通話記録を洗った。\n田中が殺された日の前後、\n頻繁にやり取りしていた番号がある。' },
+        { type: 'text', speaker: '黒田', text: 'その番号の持ち主は……\n「鈴木健太」だ。' },
+        { type: 'sfx', name: 'tensionSting' },
+        { type: 'effect', name: 'shake' },
+        { type: 'narration', text: '鈴木。\n田中と一番仲が良かった男。\n自分にも情報をくれた男。' },
+        { type: 'narration', text: 'あの鈴木が、佐藤と頻繁に連絡を取っていた？' },
+      ],
+      next: 'ch3_scene3',
+    },
+
+    // ===== 場面3：火曜夕方 — 暗号パズル解読 =====
+    ch3_scene3: {
+      location: '自宅',
+      time: '火曜日 17:00',
+      bg: 'bg-home-evening',
+      content: [
+        { type: 'narration', text: '自宅に戻った。\n頭の中で情報を整理する。' },
+        { type: 'narration', text: '鈴木のことを考える。\n田中と親友だった。\n佐藤とは接点がないはずだった。' },
+        { type: 'narration', text: 'ふと、田中のUSBメモリの\nもう一つのフォルダに気づいた。\n「memo」と名付けられた隠しフォルダ。' },
+        { type: 'narration', text: '中にはテキストファイルが一つ。\n開いてみると──' },
+        { type: 'narration', text: '暗号化されたメモだった。\n文字がバラバラに並んでいる。' },
+        {
+          type: 'puzzle',
+          id: 'ch3_cipher',
+          question: '田中のメモの解読',
+          clues: [
+            '暗号文: 「きすずうらはぎものり」',
+            'ヒント：2文字ずつ区切って、逆順に読め',
+          ],
+          answer: ['すずきはうらぎりもの', 'すずきは裏切り者'],
+          hints: [
+            '「きす/ずう/らは/ぎも/のり」→ 各ペアを逆にすると？',
+            '「すき/うず/はら/もぎ/りの」…ではなく、2文字ペアの並び自体を逆順に',
+          ],
+          wrongMessage: '解読できない…もう一度考えてみよう',
+          flags: { tanaka_memo_decoded: true },
+          params: { investigation: 2 },
+        },
+        { type: 'narration', text: '「すずきはうらぎりもの」\n\n鈴木は裏切り者。' },
+        { type: 'effect', name: 'shake' },
+        { type: 'sfx', name: 'tensionSting' },
+        { type: 'narration', text: '田中は気づいていたのだ。\n鈴木が佐藤側の人間だということに。' },
+        { type: 'narration', text: 'そして田中は、このメモを残した。\n誰かが見つけることを祈って。' },
+      ],
+      next: 'ch3_scene4',
+    },
+
+    // ===== 場面4：火曜夜 — 衝撃の真実 =====
+    ch3_scene4: {
+      location: '自宅',
+      time: '火曜日 21:00',
+      bg: 'bg-home-evening',
+      content: [
+        { type: 'narration', text: '鈴木が犯人。\nその可能性を受け入れなければならない。' },
+        { type: 'narration', text: '思い返す。\n鈴木は最初から情報をくれた。\n「田中は怯えていた」と。\n「佐藤と密会していた」と。' },
+        { type: 'narration', text: 'だがそれは全て──\n佐藤に罪を集中させるための誘導だったのでは？' },
+        { type: 'narration', text: '追手の香水。\n高級腕時計。\nスーツのボタン。' },
+        {
+          type: 'condition',
+          condition: { evidence: 'chase_perfume' },
+          then: 'ch3_scene4_perfume',
+          else: 'ch3_scene4_continue',
+        },
+      ],
+    },
+
+    ch3_scene4_perfume: {
+      location: '自宅',
+      time: '火曜日 21:05',
+      bg: 'bg-home-evening',
+      showTransition: false,
+      content: [
+        { type: 'narration', text: 'あの夜の追手。\n甘い香水の匂い。\n\n……鈴木はいつもコロンをつけていた。\nあの甘い香り。まさか。' },
+        { type: 'narration', text: '全てが繋がっていく。' },
+      ],
+      next: 'ch3_scene4_continue',
+    },
+
+    ch3_scene4_continue: {
+      location: '自宅',
+      time: '火曜日 21:10',
+      bg: 'bg-home-evening',
+      showTransition: false,
+      content: [
+        { type: 'narration', text: '黒田に電話した。' },
+        { type: 'text', speaker: '{name}', text: '黒田さん。\n鈴木が実行犯だと思います。' },
+        { type: 'text', speaker: '黒田', text: '……根拠は。' },
+        { type: 'text', speaker: '{name}', text: '田中がUSBに残したメモを解読しました。\n「鈴木は裏切り者」と書かれていた。' },
+        { type: 'text', speaker: '黒田', text: 'なるほど。\n通話記録とも一致する。\nだが…これだけでは状況証拠だ。' },
+        { type: 'text', speaker: '黒田', text: '鈴木に自白させるか\n決定的な物証を見つける必要がある。' },
+        { type: 'narration', text: '鈴木に近づく必要がある。\nだが相手はもう警戒しているはずだ。' },
+        { type: 'text', speaker: '黒田', text: '明日、鈴木を呼び出せるか。\n俺が近くで待機する。\n録音もする。' },
+        { type: 'text', speaker: '{name}', text: '……やります。' },
+        { type: 'narration', text: '覚悟を決めた。\n明日、鈴木と対峙する。' },
+      ],
+      choices: [
+        {
+          id: 'plan_direct',
+          text: '正面から問い詰める',
+          params: { boldness: 2 },
+          flags: { ch3_approach: 'direct' },
+          next: 'ch3_scene5',
+        },
+        {
+          id: 'plan_trap',
+          text: '罠を仕掛けて自白させる',
+          params: { investigation: 2 },
+          flags: { ch3_approach: 'trap' },
+          next: 'ch3_scene5',
+        },
+      ],
+    },
+
+    // ===== 場面5：水曜夜 — 最終対決（鈴木との対峙 + QTE） =====
+    ch3_scene5: {
+      location: '公園',
+      time: '水曜日 20:00',
+      bg: 'bg-night-danger',
+      content: [
+        { type: 'narration', text: '水曜日の夜。\nあの公園のベンチに鈴木を呼び出した。' },
+        { type: 'narration', text: '「田中のことで大事な話がある」\nそれだけ伝えた。' },
+        { type: 'narration', text: 'ポケットの中のスマホで\n録音アプリを起動している。\n\n黒田は近くの車の中で待機している。' },
+        { type: 'sfx', name: 'footsteps' },
+        { type: 'narration', text: '鈴木が来た。\nいつもの穏やかな表情。\n\nだがその裏に何が隠れているのか\n今の自分は知っている。' },
+        { type: 'text', speaker: '鈴木', text: 'よう、{name}。\n話って何だ？' },
+        {
+          type: 'condition',
+          condition: { flag: 'ch3_approach', value: 'direct' },
+          then: 'ch3_scene5_direct',
+          else: 'ch3_scene5_trap',
+        },
+      ],
+    },
+
+    ch3_scene5_direct: {
+      location: '公園',
+      time: '水曜日 20:05',
+      bg: 'bg-confrontation',
+      showTransition: false,
+      content: [
+        { type: 'text', speaker: '{name}', text: '鈴木。\n単刀直入に聞く。' },
+        { type: 'text', speaker: '{name}', text: '田中を殺したのはお前か。' },
+        { type: 'narration', text: '鈴木の表情が凍りついた。\n一瞬だが、確かに動揺が走った。' },
+        { type: 'text', speaker: '鈴木', text: '……何を言ってるんだ。\n俺と田中は親友だぞ。' },
+        { type: 'text', speaker: '{name}', text: '佐藤との通話記録がある。\n田中が殺された前後、\nお前は佐藤と何度もやり取りしていた。' },
+        { type: 'text', speaker: '鈴木', text: '……それは。仕事の話だ。' },
+        { type: 'text', speaker: '{name}', text: '田中がメモを残していた。\n「鈴木は裏切り者」と。' },
+        { type: 'effect', name: 'shake' },
+      ],
+      next: 'ch3_scene5_confrontation',
+    },
+
+    ch3_scene5_trap: {
+      location: '公園',
+      time: '水曜日 20:05',
+      bg: 'bg-confrontation',
+      showTransition: false,
+      content: [
+        { type: 'text', speaker: '{name}', text: '佐藤が逮捕されて安心してるだろ。' },
+        { type: 'text', speaker: '鈴木', text: 'ああ、まあな。\nこれで田中の件も解決に向かうだろ。' },
+        { type: 'text', speaker: '{name}', text: '実はな。\n佐藤が取り調べで「ある名前」を出したらしい。' },
+        { type: 'narration', text: '嘘だ。だが鈴木の反応を見る。' },
+        { type: 'text', speaker: '鈴木', text: '……名前？\n誰の。' },
+        { type: 'narration', text: '声が微かに震えている。' },
+        { type: 'text', speaker: '{name}', text: 'お前の名前だよ、鈴木。' },
+        { type: 'effect', name: 'shake' },
+        { type: 'narration', text: '鈴木の顔から血の気が引いた。' },
+        { type: 'text', speaker: '鈴木', text: '嘘だ…あいつがそんなことを……' },
+        { type: 'narration', text: '動揺している。\n「あいつがそんなことを」──\n佐藤との関係を否定しなかった。' },
+      ],
+      next: 'ch3_scene5_confrontation',
+    },
+
+    ch3_scene5_confrontation: {
+      location: '公園',
+      time: '水曜日 20:10',
+      bg: 'bg-confrontation',
+      showTransition: false,
+      content: [
+        { type: 'narration', text: '鈴木の仮面が剥がれ始めた。' },
+        { type: 'text', speaker: '鈴木', text: '……お前に何がわかる。' },
+        { type: 'narration', text: '鈴木の声が変わった。\nもう穏やかな友人の声ではない。' },
+        { type: 'text', speaker: '鈴木', text: '俺には借金があったんだ。\n3000万。ギャンブルで作った。\n家族にも言えない額だ。' },
+        { type: 'text', speaker: '鈴木', text: '佐藤がそれを知って近づいてきた。\n「助けてやる」って。\n横領の分け前で返済させてやるって。' },
+        { type: 'text', speaker: '鈴木', text: '条件は一つ。\n佐藤の「仕事」を手伝うこと。\n最初は小さなことだった。書類の偽造とか。' },
+        { type: 'sfx', name: 'tensionSting' },
+        { type: 'text', speaker: '鈴木', text: 'でも田中が不正に気づいた。\n佐藤は焦った。\nそして……俺に言った。' },
+        { type: 'text', speaker: '鈴木', text: '「田中を黙らせろ」って。' },
+        { type: 'narration', text: '鈴木の目に涙が光っている。\nだが同情はできない。' },
+        { type: 'text', speaker: '鈴木', text: '俺は……田中は親友だった。\n本当に。でも……\n追い詰められて……' },
+        { type: 'text', speaker: '{name}', text: '……それで田中を。' },
+        { type: 'text', speaker: '鈴木', text: '金曜の夜。田中を居酒屋に誘った。\nお前との約束より先に、俺が田中に会った。\nそして……' },
+        { type: 'narration', text: '鈴木が拳を握りしめた。\n\nそして突然、こちらに向かってきた。' },
+        { type: 'text', speaker: '鈴木', text: 'お前も……お前も全部知ってるなら\nもう終わりだ……！' },
+        { type: 'effect', name: 'shake' },
+      ],
+      action: {
+        id: 'ch3_qte',
+        type: 'qte',
+        actions: [
+          { text: '鈴木が掴みかかってくる！', subtext: '← 左に避けろ！', direction: 'left', timeLimit: 2 },
+          { text: '右フックが飛んでくる！', subtext: '↑ しゃがんで避けろ！', direction: 'up', timeLimit: 1.8 },
+          { text: '鈴木がナイフを取り出した！', subtext: '→ 右に跳んで距離を取れ！', direction: 'right', timeLimit: 1.5 },
+          { text: '今だ！黒田を呼べ！', subtext: '● タップして叫べ！', direction: 'tap', timeLimit: 2 },
+        ],
+        onSuccess: {
+          params: { boldness: 3 },
+          flags: { ch3_qte_success: true },
+          next: 'ch3_scene5_qte_success',
+        },
+        onFailure: {
+          flags: { ch3_qte_success: false },
+          next: 'ch3_scene5_qte_fail',
+        },
+      },
+    },
+
+    ch3_scene5_qte_success: {
+      location: '公園',
+      time: '水曜日 20:15',
+      bg: 'bg-night-danger',
+      showTransition: false,
+      content: [
+        { type: 'text', speaker: '{name}', text: '黒田さん！！' },
+        { type: 'sfx', name: 'footsteps' },
+        { type: 'narration', text: '黒田が車から飛び出してきた。\n別の刑事も一緒だ。' },
+        { type: 'text', speaker: '黒田', text: '鈴木健太！動くな！\n捜査一課だ！' },
+        { type: 'narration', text: '鈴木はナイフを落とした。\n膝から崩れ落ちる。' },
+        { type: 'text', speaker: '鈴木', text: '……もう、いいんだ。\n終わりにしてくれ。' },
+        { type: 'narration', text: '鈴木は泣き崩れた。\n黒田が手錠をかける。' },
+        { type: 'narration', text: '全ての録音は成功していた。\n鈴木の自白。動機。経緯。\n全て記録されている。' },
+      ],
+      next: 'ch3_scene6',
+    },
+
+    ch3_scene5_qte_fail: {
+      location: '公園',
+      time: '水曜日 20:15',
+      bg: 'bg-night-danger',
+      showTransition: false,
+      content: [
+        { type: 'narration', text: '鈴木に押し倒された。\nだがその時──' },
+        { type: 'sfx', name: 'footsteps' },
+        { type: 'text', speaker: '黒田', text: 'そこまでだ！鈴木！' },
+        { type: 'narration', text: '黒田が駆けつけた。\n間一髪だった。' },
+        { type: 'narration', text: '鈴木は抵抗を止めた。\n全身の力が抜けたように\nその場に座り込んだ。' },
+        { type: 'text', speaker: '鈴木', text: '……ああ。終わりだ。\n全部、終わりだ。' },
+        { type: 'narration', text: '黒田が手錠をかける。\n録音は途中からだが\n鈴木の自白は記録されている。' },
+      ],
+      next: 'ch3_scene6',
+    },
+
+    // ===== 場面6：木曜 — 真相解明 =====
+    ch3_scene6: {
+      location: '警察署',
+      time: '木曜日 14:00',
+      bg: 'bg-interrogation',
+      content: [
+        { type: 'narration', text: '鈴木が逮捕されて二日。\n警察署に呼ばれた。' },
+        { type: 'text', speaker: '黒田', text: '鈴木が全面的に自供した。\n事件の全貌が明らかになった。' },
+        { type: 'narration', text: '黒田が事件の全容を説明してくれた。' },
+        { type: 'text', speaker: '黒田', text: '佐藤は3年前から横領を続けていた。\n架空取引で会社の金を抜き、\n個人口座に移していた。' },
+        { type: 'text', speaker: '黒田', text: '鈴木はギャンブルの借金を抱えていた。\n佐藤はそれを知り、\n鈴木を協力者に取り込んだ。' },
+        { type: 'text', speaker: '黒田', text: '田中が不正に気づいたのは1ヶ月前。\n佐藤は最初、金で黙らせようとした。\nだが田中は拒否した。' },
+        { type: 'text', speaker: '黒田', text: '佐藤は鈴木に命令した。\n「田中を処理しろ」と。\n鈴木は追い詰められて従った。' },
+        { type: 'narration', text: '鈴木は田中の「親友」として\n金曜の夜に田中を呼び出した。\nそして──' },
+        { type: 'text', speaker: '黒田', text: 'その後、佐藤と鈴木は\nお前に罪を着せる計画を立てた。\n偽造メッセージ。脅迫。全て。' },
+        { type: 'text', speaker: '黒田', text: '鈴木がお前に情報を流していたのも\n計算のうちだ。\nお前を泳がせて、証拠を残させる。\n最終的にお前を犯人に仕立てるためにな。' },
+        { type: 'narration', text: '全てが繋がった。\n\n親友を裏切り、無実の人間に罪を着せる。\nそれが鈴木の──否、佐藤に操られた\n鈴木の役割だった。' },
+        { type: 'text', speaker: '黒田', text: '{name}。\nお前のおかげで真相にたどり着けた。\n田中の無念を晴らせた。' },
+        { type: 'text', speaker: '黒田', text: '……礼を言う。' },
+        { type: 'narration', text: '黒田が深く頭を下げた。\nこの厳つい刑事が、こんな表情をするとは。' },
+      ],
+      next: 'ch3_scene7',
+    },
+
+    // ===== 場面7：エンディング =====
+    ch3_scene7: {
+      location: '自宅',
+      time: '金曜日 — 一週間後',
+      effect: 'fadeIn',
+      bg: 'bg-home-morning',
+      content: [
+        { type: 'narration', text: '一週間が経った。' },
+        { type: 'narration', text: '佐藤は横領と殺人教唆で起訴された。\n鈴木は殺人罪で起訴された。\n\n二人とも、もう戻ってこない。' },
+        { type: 'narration', text: '{name}への容疑は完全に晴れた。\n会社は混乱しているが\n自分の居場所はまだある。' },
+        {
+          type: 'phone',
+          appName: '山本とのトーク',
+          messages: [
+            { from: 'other', text: '今夜、田中の好きだった店で飲まないか', time: '18:00', senderName: '山本' },
+            { from: 'other', text: '田中のこと、ちゃんと送ってやりたい', time: '18:01', senderName: '山本' },
+            { from: 'player', text: 'ああ。行こう', time: '18:05' },
+          ],
+        },
+        { type: 'narration', text: '窓の外を見る。\n夕焼けが街を染めている。' },
+        { type: 'narration', text: '田中はもういない。\n鈴木ももういない。\n\nだが真実は明らかになった。' },
+        { type: 'narration', text: 'あの一週間。\n疑われ、脅され、追われた日々。\n\n自分は負けなかった。\n真実を掴み取った。' },
+        { type: 'narration', text: '\n\n── 容疑者X ──\n\n　　　　　完' },
+      ],
+      choices: [
+        {
+          id: 'show_rank',
+          text: '評価を見る',
+          next: 'ch3_rank',
+        },
+      ],
+    },
+
+    // ===== ランク評価画面への遷移 =====
+    ch3_rank: {
+      location: '',
+      time: '',
+      showTransition: false,
+      showRank: true,
+      content: [
+        { type: 'flag', key: 'game_cleared', value: true },
+      ],
+    },
+
+  },
+};

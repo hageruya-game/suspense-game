@@ -9,6 +9,12 @@ const App = {
     if (typeof Chapter1 !== 'undefined') {
       Engine.registerScenes(Chapter1.scenes);
     }
+    if (typeof Chapter2 !== 'undefined') {
+      Engine.registerScenes(Chapter2.scenes);
+    }
+    if (typeof Chapter3 !== 'undefined') {
+      Engine.registerScenes(Chapter3.scenes);
+    }
   },
 
   bindUI() {
@@ -25,10 +31,19 @@ const App = {
       }
     });
 
-    // Name input -> Tutorial
+    // Name & Gender input -> Tutorial
     document.getElementById('player-name').addEventListener('input', (e) => {
       Engine.state.player.name = e.target.value.trim();
-      document.getElementById('btn-go-tutorial').disabled = !Engine.state.player.name;
+      this._checkCreateReady();
+    });
+
+    document.querySelectorAll('.gender-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        Engine.state.player.gender = btn.dataset.gender;
+        this._checkCreateReady();
+      });
     });
 
     document.getElementById('btn-go-tutorial').addEventListener('click', () => {
@@ -98,6 +113,17 @@ const App = {
       this.showScreen('screen-title');
       this.checkContinue();
     });
+
+    // Rank screen
+    document.getElementById('btn-rank-replay').addEventListener('click', () => {
+      SaveManager.deleteSave();
+      Engine.init();
+      this.showScreen('screen-create');
+    });
+    document.getElementById('btn-rank-title').addEventListener('click', () => {
+      this.showScreen('screen-title');
+      this.checkContinue();
+    });
   },
 
   checkContinue() {
@@ -121,6 +147,38 @@ const App = {
     document.getElementById('ending-title').textContent = title;
     document.getElementById('ending-message').textContent = message;
     this.showScreen('screen-ending');
+  },
+
+  _checkCreateReady() {
+    const hasName = Engine.state.player.name && Engine.state.player.name.length > 0;
+    const hasGender = Engine.state.player.gender && Engine.state.player.gender.length > 0;
+    document.getElementById('btn-go-tutorial').disabled = !(hasName && hasGender);
+  },
+
+  showRankScreen(result) {
+    if (typeof SFX !== 'undefined') SFX.stopAmbient();
+
+    const letterEl = document.getElementById('rank-letter');
+    const titleEl = document.getElementById('rank-title');
+    const scoreEl = document.getElementById('rank-score-total');
+    const detailsEl = document.getElementById('rank-details');
+
+    letterEl.textContent = result.rank;
+    letterEl.className = 'rank-letter rank-' + result.rank;
+    titleEl.textContent = '「' + result.title + '」';
+    scoreEl.textContent = '総合スコア: ' + result.score + ' / 100';
+
+    detailsEl.innerHTML = '';
+    for (const key of Object.keys(result.details)) {
+      const d = result.details[key];
+      const row = document.createElement('div');
+      row.className = 'rank-detail-row';
+      row.innerHTML = `<span class="rank-detail-label">${d.label}</span><span class="rank-detail-score">${d.score} / ${d.max}</span>`;
+      detailsEl.appendChild(row);
+    }
+
+    this.showScreen('screen-rank');
+    if (typeof SFX !== 'undefined') SFX.chapter();
   },
 
   showToast(text) {

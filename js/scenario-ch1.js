@@ -80,7 +80,7 @@ const Chapter1 = {
       content: [
         { type: 'sfx', name: 'phoneRing' },
         { type: 'narration', text: '再び発信する。応答なし。\n留守電に切り替わった。' },
-        { type: 'text', speaker: '{name}', text: '田中、待ってるぞ。\n大丈夫か？何かあったら連絡くれ。' },
+        { type: 'text', speaker: '{name}', text: '田中、待ってる{dazo}。\n大丈夫か？何かあったら連絡くれ。' },
         { type: 'narration', text: '留守電を残した。\nこの留守電が後に「最後に田中に連絡した人物」の\n証拠として使われることになるとは\nこの時は知る由もなかった。' },
         { type: 'narration', text: 'しばらく待ったが、結局田中は現れなかった。\n帰宅する。' },
       ],
@@ -406,7 +406,7 @@ const Chapter1 = {
       bg: 'bg-interrogation',
       showTransition: false,
       content: [
-        { type: 'text', speaker: '{name}', text: '誰かが偽造したんだ。\n俺はこんなメッセージ送っていない。' },
+        { type: 'text', speaker: '{name}', text: '誰かが偽造した{nda}。\n{I}はこんなメッセージ送っていない。' },
         { type: 'text', speaker: '黒田', text: 'では誰がなぜ偽造するんですか？' },
         { type: 'narration', text: '動機を説明できない。\nまだ何もわかっていないのだから。\n\n証拠なしの主張は弱い。' },
       ],
@@ -555,7 +555,7 @@ const Chapter1 = {
         { type: 'narration', text: '信頼できる友人、山本に電話をかけた。' },
         { type: 'narration', text: '3コールで出た。だが声がおかしい。' },
         { type: 'text', speaker: '山本', text: 'あ…{name}か。\nどうした。' },
-        { type: 'text', speaker: '{name}', text: '田中のこと聞いたか。\n俺、警察に疑われてる。' },
+        { type: 'text', speaker: '{name}', text: '田中のこと聞いたか。\n{I}、警察に疑われてる。' },
         { type: 'narration', text: '沈黙。' },
         { type: 'text', speaker: '山本', text: '……今は関わらない方がいい。\n頼むから。' },
         { type: 'narration', text: '電話は不自然に切られた。\n山本は何かを知っている。\nそしてそれを話すことを恐れている。' },
@@ -648,25 +648,10 @@ const Chapter1 = {
         {
           id: 'to_ch2',
           text: '第2章へ進む',
-          next: 'ch2_coming_soon',
+          next: 'ch2_scene1',
         },
       ],
     },
 
-    // Placeholder for Chapter 2
-    ch2_coming_soon: {
-      location: '',
-      time: '',
-      content: [
-        { type: 'narration', text: '第2章「捜査」\n\n── Coming Soon ──\n\n第1章のテストプレイはここまでです。\nお疲れ様でした。' },
-      ],
-      choices: [
-        {
-          id: 'back_title',
-          text: 'タイトルに戻る',
-          next: null,
-        },
-      ],
-    },
   },
 };

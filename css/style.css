@@ -147,6 +147,37 @@ body {
   border-color: #c0392b;
 }
 
+.gender-section {
+  text-align: center;
+}
+
+.gender-buttons {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+}
+
+.gender-btn {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  background: transparent;
+  border: 1px solid #444;
+  color: #aaa;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 4px;
+  letter-spacing: 0.2em;
+}
+
+.gender-btn:active,
+.gender-btn.selected {
+  border-color: #c0392b;
+  color: #fff;
+  background: rgba(192, 57, 43, 0.15);
+}
+
 #btn-go-tutorial {
   margin-top: 1rem;
   width: 100%;
@@ -739,6 +770,18 @@ body {
   background: linear-gradient(180deg, #0f1015 0%, #101218 50%, #0e0f14 100%) !important;
 }
 
+.bg-cafe {
+  background: linear-gradient(180deg, #0f0e0a 0%, #14120e 50%, #0e0d0a 100%) !important;
+}
+
+.bg-office-dark {
+  background: linear-gradient(180deg, #060810 0%, #0a0c14 50%, #060810 100%) !important;
+}
+
+.bg-confrontation {
+  background: linear-gradient(180deg, #0a0508 0%, #140810 50%, #0a0408 100%) !important;
+}
+
 /* ========== CHAPTER TITLE ========== */
 #chapter-title-overlay {
   position: absolute;
@@ -779,6 +822,240 @@ body {
 @keyframes chapterFadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========== PUZZLE OVERLAY ========== */
+.puzzle-panel {
+  background: #1a1a2e;
+  border: 1px solid #333;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: min(90%, 420px);
+  max-height: 85%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.puzzle-text {
+  font-size: clamp(0.95rem, 3vw, 1.1rem);
+  color: #e0e0e0;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  text-align: center;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #2a2a3e;
+}
+
+.puzzle-clues {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.puzzle-clue-item {
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+  color: #aab;
+  padding: 0.5rem 0.8rem;
+  background: rgba(192, 57, 43, 0.05);
+  border: 1px solid #2a2a3e;
+  border-radius: 6px;
+  text-align: center;
+  letter-spacing: 0.15em;
+}
+
+.puzzle-hint {
+  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
+  color: #e0c080;
+  padding: 0.6rem 0.8rem;
+  background: rgba(224, 192, 128, 0.08);
+  border: 1px solid rgba(224, 192, 128, 0.2);
+  border-radius: 6px;
+  display: none;
+}
+
+.puzzle-input-area {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.puzzle-input {
+  flex: 1;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid #444;
+  color: #e0e0e0;
+  font-size: 1.1rem;
+  font-family: inherit;
+  outline: none;
+  border-radius: 6px;
+  text-align: center;
+  letter-spacing: 0.2em;
+  transition: border-color 0.3s;
+}
+
+.puzzle-input:focus {
+  border-color: #c0392b;
+}
+
+.puzzle-submit-btn {
+  min-width: auto;
+  padding: 0.8rem 1.2rem;
+  white-space: nowrap;
+}
+
+.puzzle-hint-btn {
+  min-width: auto;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  border-color: #e0c080;
+  color: #e0c080;
+}
+
+.puzzle-hint-btn:hover {
+  background: rgba(224, 192, 128, 0.1);
+}
+
+.puzzle-hint-btn:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.puzzle-attempts {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: center;
+}
+
+.puzzle-feedback {
+  font-size: clamp(0.9rem, 3vw, 1.05rem);
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 6px;
+  min-height: 1.5em;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.puzzle-feedback.correct {
+  color: #4caf50;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.puzzle-feedback.wrong {
+  color: #c0392b;
+  background: rgba(192, 57, 43, 0.1);
+  border: 1px solid rgba(192, 57, 43, 0.3);
+  animation: shake 0.4s ease-in-out;
+}
+
+/* ========== RANK SCREEN ========== */
+#screen-rank {
+  background: linear-gradient(180deg, #0a0a1a 0%, #0f0a18 50%, #0a0a1a 100%);
+  justify-content: center;
+  align-items: center;
+}
+
+.rank-container {
+  text-align: center;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 450px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.rank-header {
+  font-size: clamp(0.9rem, 3vw, 1.1rem);
+  color: #888;
+  letter-spacing: 0.3em;
+  margin-bottom: 0.5rem;
+}
+
+.rank-letter {
+  font-size: clamp(4rem, 20vw, 8rem);
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  margin: 0.5rem 0;
+  opacity: 0;
+  animation: rankReveal 1.5s ease-out 0.5s forwards;
+}
+
+.rank-letter.rank-S { color: #ffd700; text-shadow: 0 0 40px rgba(255, 215, 0, 0.6); }
+.rank-letter.rank-A { color: #ff6b35; text-shadow: 0 0 30px rgba(255, 107, 53, 0.5); }
+.rank-letter.rank-B { color: #4ecdc4; text-shadow: 0 0 25px rgba(78, 205, 196, 0.4); }
+.rank-letter.rank-C { color: #888; text-shadow: 0 0 20px rgba(136, 136, 136, 0.3); }
+.rank-letter.rank-D { color: #c0392b; text-shadow: 0 0 20px rgba(192, 57, 43, 0.3); }
+.rank-letter.rank-E { color: #555; text-shadow: 0 0 15px rgba(85, 85, 85, 0.2); }
+
+@keyframes rankReveal {
+  0% { opacity: 0; transform: scale(3); }
+  60% { opacity: 1; transform: scale(0.9); }
+  80% { transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.rank-title {
+  font-size: clamp(1.1rem, 4vw, 1.5rem);
+  color: #e0c080;
+  letter-spacing: 0.4em;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: rankFadeIn 1s ease-out 1.5s forwards;
+}
+
+@keyframes rankFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.rank-score-total {
+  font-size: clamp(1.2rem, 4vw, 1.6rem);
+  color: #fff;
+  margin-bottom: 1.2rem;
+  opacity: 0;
+  animation: rankFadeIn 0.8s ease-out 2s forwards;
+}
+
+.rank-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+  opacity: 0;
+  animation: rankFadeIn 0.8s ease-out 2.3s forwards;
+}
+
+.rank-detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.8rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #2a2a3e;
+  border-radius: 6px;
+  font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+}
+
+.rank-detail-label {
+  color: #aaa;
+}
+
+.rank-detail-score {
+  color: #e0c080;
+  font-weight: bold;
+}
+
+.rank-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  align-items: center;
+  opacity: 0;
+  animation: rankFadeIn 0.8s ease-out 2.8s forwards;
 }
 
 /* ========== RESPONSIVE: SMALL PHONES (SE, etc) ========== */

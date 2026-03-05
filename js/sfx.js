@@ -64,6 +64,9 @@ const SFX = {
       case 'night-danger': this._ambientNightDanger(); break;
       case 'convenience': this._ambientConvenience(); break;
       case 'chase': this._ambientChase(); break;
+      case 'cafe': this._ambientCafe(); break;
+      case 'office-dark': this._ambientOfficeDark(); break;
+      case 'confrontation': this._ambientConfrontation(); break;
       default: break;
     }
   },
@@ -260,6 +263,81 @@ const SFX = {
     this.ambientGain.gain.linearRampToValueAtTime(this.volume * 0.03, t + 0.8);
     osc.start();
     this.ambientNode = osc;
+  },
+
+  // Cafe: warm ambience + cup clinks
+  _ambientCafe() {
+    const t = this.ctx.currentTime;
+    const noise = this.ctx.createBufferSource();
+    noise.buffer = this._createNoise(8);
+    noise.loop = true;
+    const lp = this.ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 250;
+    noise.connect(lp);
+    lp.connect(this.ambientGain);
+    this.ambientGain.gain.setValueAtTime(0, t);
+    this.ambientGain.gain.linearRampToValueAtTime(this.volume * 0.07, t + 1);
+    noise.start();
+    this.ambientNode = noise;
+    this._startCafeClinks();
+  },
+
+  _cafeClinkInterval: null,
+  _startCafeClinks() {
+    this._stopCafeClinks();
+    this._cafeClinkInterval = setInterval(() => {
+      if (!this.ctx || this.ambientType !== 'cafe') { this._stopCafeClinks(); return; }
+      const t = this.ctx.currentTime;
+      const osc = this.ctx.createOscillator();
+      const g = this.ctx.createGain();
+      osc.connect(g);
+      g.connect(this.ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = 3000 + Math.random() * 1500;
+      g.gain.setValueAtTime(this.volume * 0.02, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+      osc.start(t);
+      osc.stop(t + 0.06);
+    }, 3000 + Math.random() * 4000);
+  },
+  _stopCafeClinks() {
+    if (this._cafeClinkInterval) { clearInterval(this._cafeClinkInterval); this._cafeClinkInterval = null; }
+  },
+
+  // Office dark: quiet hum + occasional creak
+  _ambientOfficeDark() {
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = 60;
+    const g = this.ctx.createGain();
+    osc.connect(g);
+    g.connect(this.ambientGain);
+    this.ambientGain.gain.setValueAtTime(0, t);
+    this.ambientGain.gain.linearRampToValueAtTime(this.volume * 0.03, t + 1);
+    osc.start();
+    this.ambientNode = osc;
+  },
+
+  // Confrontation: tense drone + heartbeat
+  _ambientConfrontation() {
+    const t = this.ctx.currentTime;
+    const osc = this.ctx.createOscillator();
+    osc.type = 'sawtooth';
+    osc.frequency.value = 55;
+    const lp = this.ctx.createBiquadFilter();
+    lp.type = 'lowpass';
+    lp.frequency.value = 100;
+    const g = this.ctx.createGain();
+    osc.connect(lp);
+    lp.connect(g);
+    g.connect(this.ambientGain);
+    this.ambientGain.gain.setValueAtTime(0, t);
+    this.ambientGain.gain.linearRampToValueAtTime(this.volume * 0.12, t + 1);
+    osc.start();
+    this.ambientNode = osc;
+    this._startHeartbeatLoop();
   },
 
   // Chase: tense + heartbeat

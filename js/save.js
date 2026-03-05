@@ -4,7 +4,7 @@ const SaveManager = {
 
   getDefaultState() {
     return {
-      player: { name: '' },
+      player: { name: '', gender: '' },
       currentScene: null,
       chapter: 1,
       params: {
@@ -17,6 +17,8 @@ const SaveManager = {
       flags: {},            // ストーリーフラグ
       choiceHistory: [],    // 選択履歴
       actionResults: {},    // アクションパートの結果
+      puzzleResults: {},    // パズル結果（試行回数・ヒント使用）
+      retryCount: 0,        // BAD ENDリトライ回数
     };
   },
 
