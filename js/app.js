@@ -1,0 +1,138 @@
+// ========== APP CONTROLLER ==========
+const App = {
+  init() {
+    Engine.init();
+    this.bindUI();
+    this.checkContinue();
+
+    // Register all scenarios
+    if (typeof Chapter1 !== 'undefined') {
+      Engine.registerScenes(Chapter1.scenes);
+    }
+  },
+
+  bindUI() {
+    // Title screen
+    document.getElementById('btn-new-game').addEventListener('click', () => {
+      this.showScreen('screen-create');
+    });
+    document.getElementById('btn-continue').addEventListener('click', () => {
+      const state = SaveManager.load();
+      if (state) {
+        Engine.state = state;
+        this.showScreen('screen-game');
+        Engine.playScene(state.currentScene);
+      }
+    });
+
+    // Name input -> Tutorial
+    document.getElementById('player-name').addEventListener('input', (e) => {
+      Engine.state.player.name = e.target.value.trim();
+      document.getElementById('btn-go-tutorial').disabled = !Engine.state.player.name;
+    });
+
+    document.getElementById('btn-go-tutorial').addEventListener('click', () => {
+      this.showScreen('screen-tutorial');
+    });
+
+    // Tutorial -> Game start
+    document.getElementById('btn-start').addEventListener('click', () => {
+      this.showScreen('screen-game');
+      Engine.playScene('ch1_scene1');
+    });
+
+    // Game menu
+    document.getElementById('game-menu-btn').addEventListener('click', () => {
+      document.getElementById('game-menu').classList.add('active');
+    });
+    document.getElementById('btn-close-menu').addEventListener('click', () => {
+      document.getElementById('game-menu').classList.remove('active');
+    });
+    document.getElementById('btn-save').addEventListener('click', () => {
+      if (SaveManager.save(Engine.state)) {
+        document.getElementById('game-menu').classList.remove('active');
+        this.showToast('セーブしました');
+      }
+    });
+    document.getElementById('btn-load').addEventListener('click', () => {
+      const state = SaveManager.load();
+      if (state) {
+        Engine.state = state;
+        document.getElementById('game-menu').classList.remove('active');
+        Engine.playScene(state.currentScene);
+        this.showToast('ロードしました');
+      }
+    });
+    document.getElementById('btn-evidence').addEventListener('click', () => {
+      document.getElementById('game-menu').classList.remove('active');
+      Engine.showEvidenceBoard();
+    });
+    document.getElementById('btn-close-evidence').addEventListener('click', () => {
+      document.getElementById('evidence-overlay').classList.remove('active');
+    });
+    document.getElementById('btn-back-title').addEventListener('click', () => {
+      document.getElementById('game-menu').classList.remove('active');
+      if (typeof SFX !== 'undefined') SFX.stopAmbient();
+      this.showScreen('screen-title');
+      this.checkContinue();
+    });
+
+    // Game over
+    document.getElementById('btn-retry').addEventListener('click', () => {
+      const state = SaveManager.load();
+      if (state) {
+        Engine.state = state;
+        this.showScreen('screen-game');
+        Engine.playScene(state.currentScene);
+      } else {
+        this.showScreen('screen-title');
+      }
+    });
+    document.getElementById('btn-gameover-title').addEventListener('click', () => {
+      this.showScreen('screen-title');
+      this.checkContinue();
+    });
+
+    // Ending
+    document.getElementById('btn-ending-title').addEventListener('click', () => {
+      this.showScreen('screen-title');
+      this.checkContinue();
+    });
+  },
+
+  checkContinue() {
+    const btn = document.getElementById('btn-continue');
+    btn.style.display = SaveManager.hasSave() ? 'block' : 'none';
+  },
+
+  showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  },
+
+  showGameOver(message) {
+    if (typeof SFX !== 'undefined') SFX.stopAmbient();
+    document.getElementById('gameover-message').textContent = message || '';
+    this.showScreen('screen-gameover');
+  },
+
+  showEnding(title, message) {
+    if (typeof SFX !== 'undefined') SFX.stopAmbient();
+    document.getElementById('ending-title').textContent = title;
+    document.getElementById('ending-message').textContent = message;
+    this.showScreen('screen-ending');
+  },
+
+  showToast(text) {
+    const toast = document.createElement('div');
+    toast.className = 'notification';
+    toast.textContent = text;
+    toast.style.top = 'auto';
+    toast.style.bottom = '2rem';
+    document.getElementById('screen-game').appendChild(toast);
+    setTimeout(() => toast.remove(), 2000);
+  },
+};
+
+// Start
+document.addEventListener('DOMContentLoaded', () => App.init());

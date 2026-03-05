@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>容疑者X - サスペンスノベルゲーム</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- タイトル画面 -->
+  <div id="screen-title" class="screen active">
+    <div class="title-container">
+      <h1 class="title-main">容疑者X</h1>
+      <p class="title-sub">あなたは、無実を証明できるか</p>
+      <div class="title-menu">
+        <button id="btn-new-game" class="menu-btn">NEW GAME</button>
+        <button id="btn-continue" class="menu-btn" style="display:none;">CONTINUE</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 名前入力画面 -->
+  <div id="screen-create" class="screen">
+    <div class="create-container">
+      <h2>あなたの名前は？</h2>
+      <div class="create-section">
+        <input type="text" id="player-name" placeholder="名前を入力" maxlength="10">
+      </div>
+      <button id="btn-go-tutorial" class="menu-btn" disabled>次へ</button>
+    </div>
+  </div>
+
+  <!-- チュートリアル画面 -->
+  <div id="screen-tutorial" class="screen">
+    <div class="tutorial-container">
+      <h2>遊び方</h2>
+
+      <div class="tutorial-section">
+        <div class="tutorial-icon">tap</div>
+        <div class="tutorial-text">
+          <h3>テキスト送り</h3>
+          <p>画面をタップしてストーリーを進めます</p>
+        </div>
+      </div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-icon">?!</div>
+        <div class="tutorial-text">
+          <h3>選択肢</h3>
+          <p>表示される選択肢をタップして決定<br>制限時間付きの選択もあります</p>
+        </div>
+      </div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-icon">&larr; &rarr;</div>
+        <div class="tutorial-text">
+          <h3>アクションパート</h3>
+          <p><b>スワイプ</b>で左右に回避<br><b>タップ</b>で反応する場面があります<br>画面の指示に従って素早く操作してください</p>
+        </div>
+      </div>
+
+      <div class="tutorial-section">
+        <div class="tutorial-icon">...</div>
+        <div class="tutorial-text">
+          <h3>メニュー</h3>
+          <p>右上の ≡ からセーブ・ロード・証拠確認</p>
+        </div>
+      </div>
+
+      <button id="btn-start" class="menu-btn">ゲーム開始</button>
+    </div>
+  </div>
+
+  <!-- ゲーム画面 -->
+  <div id="screen-game" class="screen">
+    <!-- チャプタータイトル -->
+    <div id="chapter-title-overlay">
+      <h2 id="chapter-title-text"></h2>
+      <p id="chapter-title-sub"></p>
+    </div>
+
+    <!-- シーン遷移 -->
+    <div id="scene-transition">
+      <div id="scene-transition-location"></div>
+      <div id="scene-transition-time"></div>
+    </div>
+
+    <!-- 場面情報 -->
+    <div id="scene-header">
+      <span id="scene-location"></span>
+      <span id="scene-time"></span>
+    </div>
+
+    <!-- テキスト表示エリア -->
+    <div id="text-area">
+      <div id="text-window">
+        <div id="speaker-name"></div>
+        <div id="text-content"></div>
+      </div>
+      <div id="text-indicator">▼</div>
+    </div>
+
+    <!-- 選択肢エリア -->
+    <div id="choices-area"></div>
+
+    <!-- スマホ演出（チャットUI） -->
+    <div id="phone-overlay" class="overlay">
+      <div id="phone-screen">
+        <div id="phone-header">
+          <span id="phone-app-name">メッセージ</span>
+          <span id="phone-time-display"></span>
+        </div>
+        <div id="phone-chat"></div>
+        <button id="phone-close" class="phone-btn">閉じる</button>
+      </div>
+    </div>
+
+    <!-- メニュー -->
+    <div id="game-menu-btn">≡</div>
+    <div id="game-menu" class="overlay">
+      <div class="menu-panel">
+        <button id="btn-save" class="menu-btn">セーブ</button>
+        <button id="btn-load" class="menu-btn">ロード</button>
+        <button id="btn-evidence" class="menu-btn">証拠ボード</button>
+        <button id="btn-back-title" class="menu-btn">タイトルへ</button>
+        <button id="btn-close-menu" class="menu-btn">閉じる</button>
+      </div>
+    </div>
+
+    <!-- 証拠ボード -->
+    <div id="evidence-overlay" class="overlay">
+      <div class="evidence-panel">
+        <h3>証拠ボード</h3>
+        <div id="evidence-list"></div>
+        <button id="btn-close-evidence" class="menu-btn">閉じる</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- アクション画面 -->
+  <div id="screen-action" class="screen">
+    <canvas id="action-canvas"></canvas>
+    <div id="action-ui">
+      <div id="action-timer"></div>
+      <div id="action-instruction"></div>
+    </div>
+  </div>
+
+  <!-- ゲームオーバー画面 -->
+  <div id="screen-gameover" class="screen">
+    <div class="gameover-container">
+      <h2 id="gameover-title">GAME OVER</h2>
+      <p id="gameover-message"></p>
+      <button id="btn-retry" class="menu-btn">リトライ</button>
+      <button id="btn-gameover-title" class="menu-btn">タイトルへ</button>
+    </div>
+  </div>
+
+  <!-- エンディング画面 -->
+  <div id="screen-ending" class="screen">
+    <div class="ending-container">
+      <h2 id="ending-title"></h2>
+      <p id="ending-message"></p>
+      <button id="btn-ending-title" class="menu-btn">タイトルへ</button>
+    </div>
+  </div>
+
+  <script src="js/sfx.js"></script>
+  <script src="js/save.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/action.js"></script>
+  <script src="js/scenario-ch1.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
