@@ -574,49 +574,134 @@ const Chapter1 = {
         { type: 'sfx', name: 'doorCreak' },
         { type: 'narration', text: 'ドアノブが…ゆっくり…回る音。' },
         { type: 'effect', name: 'shake' },
-        { type: 'narration', text: '誰かが入ってこようとしている。' },
+        { type: 'narration', text: '誰かが入ってこようとしている。\n\n逃げなければ──！' },
       ],
-      // Action part: Chase
-      action: {
-        id: 'ch1_chase',
-        type: 'chase',
-        duration: 12,
-        onSuccess: {
+      choices: [
+        {
+          id: 'window',
+          text: '窓から裏路地へ逃げる',
           params: { boldness: 1 },
-          next: 'ch1_scene6_escape_success',
+          flags: { chase_step1: 'window' },
+          next: 'ch1_scene6_step2',
         },
-        onFailure: {
-          params: { investigation: 1 },
-          evidence: [{ id: 'chase_perfume', name: '追手の香水の匂い', description: '組み伏せられた際に感じた高級な香水の匂い。男性用。' }],
-          next: 'ch1_scene6_escape_fail',
+        {
+          id: 'front',
+          text: '玄関を突破する',
+          params: { suspicion: 1 },
+          flags: { chase_step1: 'front' },
+          next: 'ch1_scene6_front_fail',
         },
-      },
+        {
+          id: 'hide',
+          text: '部屋の中に隠れる',
+          flags: { chase_step1: 'hide' },
+          next: 'ch1_scene6_hide_fail',
+        },
+      ],
+      timeLimit: 8,
     },
 
-    ch1_scene6_escape_success: {
-      location: '路地裏',
-      time: '土曜日 21:05',
-      bg: 'bg-night-street',
+    ch1_scene6_front_fail: {
+      location: '自宅 玄関',
+      time: '土曜日 21:01',
+      bg: 'bg-night-danger',
       showTransition: false,
       content: [
-        { type: 'sfx', name: 'footsteps' },
-        { type: 'narration', text: '窓から飛び出し、路地を走った。\n追手を撒いた。' },
-        { type: 'narration', text: '息を切らしてコンビニに駆け込む。\n蛍光灯の白い光が目に染みる。' },
-        { type: 'narration', text: '追ってきた人物の顔は見えなかった。\nフードを被っていた。\n\nだが一つわかる。\n誰かが自分を消そうとしている。' },
+        { type: 'narration', text: '玄関を開けた瞬間、\n黒い影が立ちはだかった。' },
+        { type: 'effect', name: 'shake' },
+        { type: 'narration', text: '組み伏せられる。\nだがその瞬間、通行人の声が聞こえた。\n追手はすぐに逃げていった。' },
+        { type: 'narration', text: '顔は見えなかった。\nだが一つ、記憶に残るものがあった。' },
+        { type: 'narration', text: '香水の匂い。\n高級な、男性用の香水。\nどこかで嗅いだことがある気がする。' },
+        { type: 'params', changes: { investigation: 1 } },
+        { type: 'evidence', id: 'chase_perfume', name: '追手の香水の匂い', description: '組み伏せられた際に感じた高級な香水の匂い。男性用。' },
+        { type: 'flag', key: 'ch1_chase_result', value: 'fail' },
       ],
       next: 'ch1_scene7',
     },
 
-    ch1_scene6_escape_fail: {
-      location: '自宅前',
-      time: '土曜日 21:05',
+    ch1_scene6_hide_fail: {
+      location: '自宅',
+      time: '土曜日 21:01',
       bg: 'bg-night-danger',
       showTransition: false,
       content: [
-        { type: 'narration', text: '捕まった。\n組み伏せられる。' },
-        { type: 'narration', text: 'だがその瞬間、通行人の声が聞こえた。\n追手はすぐに逃げていった。' },
-        { type: 'narration', text: '顔は見えなかった。\nだが一つ、記憶に残るものがあった。' },
+        { type: 'narration', text: 'クローゼットに身を隠す。\n息を殺す。' },
+        { type: 'sfx', name: 'footsteps' },
+        { type: 'narration', text: '侵入者が部屋に入ってきた。\n足音が近づいてくる。' },
+        { type: 'effect', name: 'shake' },
+        { type: 'narration', text: 'クローゼットが開けられた。\n見つかった。' },
+        { type: 'narration', text: '組み伏せられる。\nだがその瞬間、外から声が聞こえた。\n追手は舌打ちして逃げていった。' },
         { type: 'narration', text: '香水の匂い。\n高級な、男性用の香水。\nどこかで嗅いだことがある気がする。' },
+        { type: 'params', changes: { investigation: 1 } },
+        { type: 'evidence', id: 'chase_perfume', name: '追手の香水の匂い', description: '組み伏せられた際に感じた高級な香水の匂い。男性用。' },
+        { type: 'flag', key: 'ch1_chase_result', value: 'fail' },
+      ],
+      next: 'ch1_scene7',
+    },
+
+    ch1_scene6_step2: {
+      location: '裏路地',
+      time: '土曜日 21:02',
+      bg: 'bg-night-street',
+      showTransition: false,
+      content: [
+        { type: 'sfx', name: 'footsteps' },
+        { type: 'narration', text: '窓から飛び出した。\n裏路地を走る。' },
+        { type: 'narration', text: '背後から足音が追ってくる。\n道が二手に分かれている。' },
+      ],
+      choices: [
+        {
+          id: 'narrow',
+          text: '狭い路地に入る（体が大きい追手には不利）',
+          flags: { chase_step2: 'narrow' },
+          next: 'ch1_scene6_step3',
+        },
+        {
+          id: 'main_road',
+          text: '大通りに出る（人目がある）',
+          flags: { chase_step2: 'main_road' },
+          next: 'ch1_scene6_step3',
+        },
+      ],
+      timeLimit: 6,
+    },
+
+    ch1_scene6_step3: {
+      location: '路地裏',
+      time: '土曜日 21:03',
+      bg: 'bg-night-street',
+      showTransition: false,
+      content: [
+        { type: 'narration', text: '走り続ける。\n足音は…まだ後ろに聞こえる。' },
+        { type: 'narration', text: 'コンビニの明かりが見えた。\nだが近くに暗がりもある。' },
+      ],
+      choices: [
+        {
+          id: 'convenience',
+          text: 'コンビニに駆け込む（人がいる安全な場所）',
+          flags: { chase_step3: 'convenience' },
+          next: 'ch1_scene6_escape_success',
+        },
+        {
+          id: 'dark',
+          text: '暗がりに隠れてやり過ごす',
+          flags: { chase_step3: 'dark' },
+          next: 'ch1_scene6_escape_success',
+        },
+      ],
+      timeLimit: 6,
+    },
+
+    ch1_scene6_escape_success: {
+      location: 'コンビニ前',
+      time: '土曜日 21:05',
+      bg: 'bg-night-street',
+      showTransition: false,
+      content: [
+        { type: 'narration', text: '追手を撒いた。' },
+        { type: 'narration', text: '息を切らして立ち止まる。\n蛍光灯の白い光が目に染みる。' },
+        { type: 'narration', text: '追ってきた人物の顔は見えなかった。\nフードを被っていた。\n\nだが一つわかる。\n誰かが自分を消そうとしている。' },
+        { type: 'flag', key: 'ch1_chase_result', value: 'success' },
       ],
       next: 'ch1_scene7',
     },

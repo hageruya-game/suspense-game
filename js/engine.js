@@ -848,19 +848,21 @@ const Engine = {
     details.evidence = { score: evidenceScore, max: 25, label: `証拠収集 (${collected}/${totalEvidence})` };
     score += evidenceScore;
 
-    // 4. アクション成功率 (max 20 points)
-    const actionIds = ['ch1_chase', 'ch2_stealth', 'ch2_qte'];
-    let actionSuccesses = 0;
-    let actionTotal = 0;
-    actionIds.forEach(id => {
-      if (this.state.actionResults[id]) {
-        actionTotal++;
-        if (this.state.actionResults[id].success) actionSuccesses++;
-      }
-    });
-    const actionScore = actionTotal > 0 ? Math.round((actionSuccesses / actionTotal) * 20) : 10;
-    details.action = { score: actionScore, max: 20, label: `アクション成功率 (${actionSuccesses}/${actionTotal})` };
-    score += actionScore;
+    // 4. 重要場面の判断力 (max 20 points)
+    let decisionScore = 0;
+    let decisionTotal = 0;
+    // Chase: escaped successfully?
+    if (this.state.flags.ch1_chase_result === 'success') { decisionScore += 7; }
+    else if (this.state.flags.ch1_chase_result === 'fail') { decisionScore += 3; }
+    decisionTotal += 7;
+    // Stealth: succeeded?
+    if (this.state.flags.stealth_success) { decisionScore += 7; }
+    decisionTotal += 7;
+    // Confrontation: got confession?
+    if (this.state.flags.qte_success) { decisionScore += 6; }
+    decisionTotal += 6;
+    details.action = { score: decisionScore, max: 20, label: `判断力 (${decisionScore}/${decisionTotal})` };
+    score += decisionScore;
 
     // 5. BAD END回避 (max 10 points)
     const retries = this.state.retryCount || 0;

@@ -128,24 +128,38 @@ const Chapter2 = {
         { type: 'narration', text: '薄暗いオフィス。\n非常灯の緑色の光だけが\n廊下を照らしている。' },
         { type: 'narration', text: '田中のデスクまでたどり着けるか──' },
       ],
-      action: {
-        id: 'ch2_stealth',
-        type: 'stealth',
-        onSuccess: {
+      choices: [
+        {
+          id: 'observe',
+          text: '警備員の巡回パターンを観察してから進む',
           params: { investigation: 2 },
+          flags: { stealth_success: true },
           evidence: [
             { id: 'usb_memory', name: 'USBメモリ「sato_keiri_2024」', description: '田中のデスクの引き出しに隠されていたUSBメモリ。ラベルに「sato_keiri_2024」と書かれている。' },
             { id: 'thursday_dinner', name: '田中と佐藤の木曜の食事', description: '田中のデスクの引き出しに入っていた領収書。殺害前日の木曜、高級レストランで佐藤と2人で食事。' },
           ],
-          flags: { stealth_success: true },
           next: 'ch2_scene2_success',
         },
-        onFailure: {
+        {
+          id: 'rush',
+          text: '今のうちに急いで駆け抜ける',
           params: { suspicion: 2 },
           flags: { stealth_success: false },
           next: 'ch2_scene2_fail',
         },
-      },
+        {
+          id: 'distract',
+          text: '物音を立てて警備員をおびき寄せ、隙に進む',
+          params: { boldness: 1, investigation: 1 },
+          flags: { stealth_success: true },
+          evidence: [
+            { id: 'usb_memory', name: 'USBメモリ「sato_keiri_2024」', description: '田中のデスクの引き出しに隠されていたUSBメモリ。ラベルに「sato_keiri_2024」と書かれている。' },
+            { id: 'thursday_dinner', name: '田中と佐藤の木曜の食事', description: '田中のデスクの引き出しに入っていた領収書。殺害前日の木曜、高級レストランで佐藤と2人で食事。' },
+          ],
+          next: 'ch2_scene2_success',
+        },
+      ],
+      timeLimit: 10,
     },
 
     ch2_scene2_success: {
@@ -739,49 +753,56 @@ const Chapter2 = {
         { type: 'effect', name: 'shake' },
         { type: 'narration', text: '男たちが掴みかかってきた──！' },
       ],
-      action: {
-        id: 'ch2_qte',
-        type: 'qte',
-        actions: [
-          { text: '右から腕を掴まれる！', subtext: '← 左に振りほどけ！', direction: 'left', timeLimit: 2 },
-          { text: '正面から殴りかかってくる！', subtext: '→ 右に避けろ！', direction: 'right', timeLimit: 1.8 },
-          { text: '足を払われる！', subtext: '↑ ジャンプして避けろ！', direction: 'up', timeLimit: 1.5 },
-          { text: '出口が見えた！', subtext: '● タップして走れ！', direction: 'tap', timeLimit: 2 },
-        ],
-        onSuccess: {
+      choices: [
+        {
+          id: 'present_usb',
+          text: '「架空取引の証拠がある。USBの中身を全て見た」',
           params: { boldness: 2 },
           evidence: [{ id: 'sato_confession', name: '佐藤の自白録音', description: '対峙の際にスマホで密かに録音していた佐藤の発言。「田中が余計なことをした」「処理しただけだ」。' }],
           flags: { qte_success: true },
-          next: 'ch2_scene6_qte_success',
+          next: 'ch2_scene6_evidence_success',
         },
-        onFailure: {
+        {
+          id: 'bluff',
+          text: '「警察にはもう全て話した」（ハッタリ）',
           params: { suspicion: 1 },
           flags: { qte_success: false },
-          next: 'ch2_scene6_qte_fail',
+          next: 'ch2_scene6_bluff_fail',
         },
-      },
+        {
+          id: 'record',
+          text: '黙ってスマホの録音を続ける（佐藤に喋らせる）',
+          condition: { flag: 'ch2_scene4_choice', value: 'record' },
+          params: { investigation: 2 },
+          evidence: [{ id: 'sato_confession', name: '佐藤の自白録音', description: '対峙の際にスマホで密かに録音していた佐藤の発言。「田中が余計なことをした」「処理しただけだ」。' }],
+          flags: { qte_success: true },
+          next: 'ch2_scene6_evidence_success',
+        },
+      ],
+      timeLimit: 12,
     },
 
-    ch2_scene6_qte_success: {
+    ch2_scene6_evidence_success: {
       location: '□□商事 本社ビル前',
       time: '月曜日 20:20',
       bg: 'bg-night-street',
       content: [
+        { type: 'narration', text: '佐藤が動揺した隙に、出口に向かって走った。' },
         { type: 'sfx', name: 'footsteps' },
-        { type: 'narration', text: '振りほどいて走った。\n非常口から外に飛び出す。' },
-        { type: 'narration', text: '夜の空気を思い切り吸い込む。\n追手は来ない。\nビルの中から佐藤の怒声だけが聞こえる。' },
+        { type: 'narration', text: '非常口から外に飛び出す。\n夜の空気を思い切り吸い込む。' },
         { type: 'narration', text: 'ポケットの中のスマホを確認する。\n……録音アプリは動いていた。' },
         { type: 'narration', text: '佐藤の自白。\n「田中が余計なことをした」\n「処理しただけだ」\n\n全て録音されている。' },
       ],
       next: 'ch2_scene7',
     },
 
-    ch2_scene6_qte_fail: {
+    ch2_scene6_bluff_fail: {
       location: '—',
       time: '月曜日 20:20',
       bg: 'bg-night-danger',
       content: [
-        { type: 'narration', text: '掴まれた。\n男たちに押さえつけられる。' },
+        { type: 'text', speaker: '佐藤', text: 'ハッタリだな。\n本当に話していたら\nとっくに俺のところに警察が来ている。' },
+        { type: 'narration', text: '見抜かれた。\n佐藤が部下に目配せする。\n男たちに押さえつけられる。' },
         { type: 'text', speaker: '佐藤', text: 'おとなしくしろ。\n痛い思いはさせたくない。' },
         { type: 'narration', text: 'その時──' },
         {

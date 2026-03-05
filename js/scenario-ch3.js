@@ -286,55 +286,63 @@ const Chapter3 = {
         { type: 'text', speaker: '{name}', text: '……それで田中を。' },
         { type: 'text', speaker: '鈴木', text: '金曜の夜。田中を居酒屋に誘った。\nお前との約束より先に、俺が田中に会った。\nそして……' },
         { type: 'narration', text: '鈴木が拳を握りしめた。\n\nそして突然、こちらに向かってきた。' },
-        { type: 'text', speaker: '鈴木', text: 'お前も……お前も全部知ってるなら\nもう終わりだ……！' },
-        { type: 'effect', name: 'shake' },
+        { type: 'narration', text: '鈴木の目が揺れている。\n追い詰められた獣の目だ。\n\nここで決定的な一手を打つ。' },
       ],
-      action: {
-        id: 'ch3_qte',
-        type: 'qte',
-        actions: [
-          { text: '鈴木が掴みかかってくる！', subtext: '← 左に避けろ！', direction: 'left', timeLimit: 2 },
-          { text: '右フックが飛んでくる！', subtext: '↑ しゃがんで避けろ！', direction: 'up', timeLimit: 1.8 },
-          { text: '鈴木がナイフを取り出した！', subtext: '→ 右に跳んで距離を取れ！', direction: 'right', timeLimit: 1.5 },
-          { text: '今だ！黒田を呼べ！', subtext: '● タップして叫べ！', direction: 'tap', timeLimit: 2 },
-        ],
-        onSuccess: {
+      choices: [
+        {
+          id: 'present_memo',
+          text: '「田中がメモを残していた。"鈴木は裏切り者"と」',
           params: { boldness: 3 },
           flags: { ch3_qte_success: true },
-          next: 'ch3_scene5_qte_success',
+          next: 'ch3_scene5_deduction_success',
         },
-        onFailure: {
+        {
+          id: 'present_perfume',
+          text: '「あの夜の追手の香水、お前と同じ匂いだった」',
+          condition: { evidence: 'chase_perfume' },
+          params: { investigation: 2 },
+          flags: { ch3_qte_success: true },
+          next: 'ch3_scene5_deduction_success',
+        },
+        {
+          id: 'threaten',
+          text: '「佐藤はもうお前の名前を出している」',
+          params: { boldness: 1 },
           flags: { ch3_qte_success: false },
-          next: 'ch3_scene5_qte_fail',
+          next: 'ch3_scene5_deduction_partial',
         },
-      },
+      ],
+      timeLimit: 15,
     },
 
-    ch3_scene5_qte_success: {
+    ch3_scene5_deduction_success: {
       location: '公園',
       time: '水曜日 20:15',
       bg: 'bg-night-danger',
       showTransition: false,
       content: [
-        { type: 'text', speaker: '{name}', text: '黒田さん！！' },
+        { type: 'effect', name: 'shake' },
+        { type: 'narration', text: '鈴木の顔が歪んだ。\nもう言い逃れはできない。' },
+        { type: 'text', speaker: '鈴木', text: '……もう、いいんだ。\n全部…全部、俺がやった。' },
+        { type: 'narration', text: '鈴木が膝から崩れ落ちた。' },
         { type: 'sfx', name: 'footsteps' },
-        { type: 'narration', text: '黒田が車から飛び出してきた。\n別の刑事も一緒だ。' },
         { type: 'text', speaker: '黒田', text: '鈴木健太！動くな！\n捜査一課だ！' },
-        { type: 'narration', text: '鈴木はナイフを落とした。\n膝から崩れ落ちる。' },
-        { type: 'text', speaker: '鈴木', text: '……もう、いいんだ。\n終わりにしてくれ。' },
-        { type: 'narration', text: '鈴木は泣き崩れた。\n黒田が手錠をかける。' },
+        { type: 'narration', text: '黒田が車から飛び出してきた。\n別の刑事も一緒だ。' },
+        { type: 'narration', text: '鈴木は抵抗しなかった。\n泣き崩れたまま、手錠をかけられた。' },
         { type: 'narration', text: '全ての録音は成功していた。\n鈴木の自白。動機。経緯。\n全て記録されている。' },
       ],
       next: 'ch3_scene6',
     },
 
-    ch3_scene5_qte_fail: {
+    ch3_scene5_deduction_partial: {
       location: '公園',
       time: '水曜日 20:15',
       bg: 'bg-night-danger',
       showTransition: false,
       content: [
-        { type: 'narration', text: '鈴木に押し倒された。\nだがその時──' },
+        { type: 'text', speaker: '鈴木', text: '嘘だ……嘘だろ……' },
+        { type: 'narration', text: '鈴木が取り乱した。\nこちらに掴みかかろうとする。' },
+        { type: 'narration', text: 'だがその時──' },
         { type: 'sfx', name: 'footsteps' },
         { type: 'text', speaker: '黒田', text: 'そこまでだ！鈴木！' },
         { type: 'narration', text: '黒田が駆けつけた。\n間一髪だった。' },
