@@ -20,7 +20,7 @@ const App = {
   bindUI() {
     // Title screen
     document.getElementById('btn-new-game').addEventListener('click', () => {
-      this.showScreen('screen-create');
+      this.showScreen('screen-tutorial');
     });
     document.getElementById('btn-continue').addEventListener('click', () => {
       const state = SaveManager.load();
@@ -118,7 +118,8 @@ const App = {
     document.getElementById('btn-rank-replay').addEventListener('click', () => {
       SaveManager.deleteSave();
       Engine.init();
-      this.showScreen('screen-create');
+      this.showScreen('screen-game');
+      Engine.playScene('ch1_scene1');
     });
     document.getElementById('btn-rank-title').addEventListener('click', () => {
       this.showScreen('screen-title');

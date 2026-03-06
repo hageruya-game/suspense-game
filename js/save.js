@@ -4,7 +4,7 @@ const SaveManager = {
 
   getDefaultState() {
     return {
-      player: { name: '', gender: '' },
+      player: { name: '高橋', gender: 'male' },
       currentScene: null,
       chapter: 1,
       params: {
