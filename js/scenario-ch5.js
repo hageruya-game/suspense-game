@@ -15,10 +15,12 @@ const Chapter5 = {
         {
           type: 'puzzle',
           id: 'ch5_cipher',
-          question: '田中の暗号メモの解読',
+          question: '田中の暗号メモの解読\n（解読した文章をそのまま入力）',
+          placeholder: '解読した文章を入力',
           clues: [
             '暗号文: 「のもりぎらうはきずす」',
             '田中は文字を逆さまに書く癖があった',
+            '文字を逆順に読むと、ある文章になる',
           ],
           answer: ['すずきはうらぎりもの', 'すずきは裏切り者', '鈴木は裏切り者', '鈴木はうらぎりもの', '鈴木は裏切りもの', 'すずきは裏切りもの', 'すずきはうらぎり者'],
           hints: [
@@ -73,6 +75,7 @@ const Chapter5 = {
       time: '水曜日 19:00',
       bg: 'bg-night-street',
       content: [
+        { type: 'flag', key: 'met_bartender', value: true },
         { type: 'narration', text: '「BAR K」。\nネットで調べると、繁華街の裏通りにある\n小さなバーだった。' },
         { type: 'narration', text: '口コミは少ないが\n「常連向け」「紹介制」という\n情報がいくつかある。' },
         { type: 'narration', text: '看板もないビルの3階。\n重い扉を押して中に入る。' },

@@ -99,6 +99,17 @@ const App = {
     document.getElementById('btn-close-evidence').addEventListener('click', () => {
       document.getElementById('evidence-overlay').classList.remove('active');
     });
+    document.getElementById('btn-characters').addEventListener('click', () => {
+      document.getElementById('game-menu').classList.remove('active');
+      Engine.showCharacterFiles();
+    });
+    document.getElementById('btn-close-characters').addEventListener('click', () => {
+      document.getElementById('characters-overlay').classList.remove('active');
+    });
+    document.getElementById('btn-back-to-list').addEventListener('click', () => {
+      document.getElementById('characters-list-view').style.display = '';
+      document.getElementById('characters-detail-view').style.display = 'none';
+    });
     document.getElementById('btn-back-title').addEventListener('click', () => {
       document.getElementById('game-menu').classList.remove('active');
       if (typeof SFX !== 'undefined') SFX.stopAmbient();

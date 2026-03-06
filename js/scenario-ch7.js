@@ -97,7 +97,8 @@ const Chapter7 = {
         {
           type: 'puzzle',
           id: 'ch7_letter',
-          question: '田中の最後の手紙のパスワード',
+          question: '田中の最後の手紙のパスワード\n（人名を入力）',
+          placeholder: '犯人の名前を入力',
           clues: [
             'ヒント: 「答えは犯人の名にある」',
             '田中は犯人が誰か知っていた',

@@ -45,6 +45,7 @@ const Chapter4 = {
       time: '火曜日 12:00',
       bg: 'bg-office-dark',
       content: [
+        { type: 'flag', key: 'met_shimizu', value: true },
         { type: 'narration', text: '昼休み。会社の前のベンチで弁当を食べていると\n知らない男が近づいてきた。' },
         { type: 'narration', text: '40代。がっしりした体格。\n高そうなスーツにサングラス。\nどことなく堅気ではない雰囲気。' },
         { type: 'text', speaker: '清水', text: 'ちょっといいか。\n□□商事の{name}さんだろ。' },

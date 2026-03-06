@@ -10,6 +10,7 @@ const Chapter2 = {
       time: '日曜日 9:00',
       bg: 'bg-cafe',
       content: [
+        { type: 'flag', key: 'met_yamamoto', value: true },
         { type: 'narration', text: '日曜の朝。\n駅前のカフェに山本を呼び出した。' },
         { type: 'narration', text: '店内は休日の穏やかな空気に包まれている。\nだが自分の胸の中は嵐だ。' },
         { type: 'narration', text: '山本が来た。\n顔色が悪い。目の下にくまがある。\n昨夜は眠れなかったのだろう。' },
@@ -231,7 +232,8 @@ const Chapter2 = {
         {
           type: 'puzzle',
           id: 'safe_code',
-          question: '佐藤の金庫のロック解除',
+          question: '佐藤の金庫のロック解除\n（4桁の数字を入力）',
+          placeholder: '4桁の数字',
           clues: [
             'メモ: 「0714を思い出せ」',
             '数字を逆順に並べ替えよ',
@@ -437,7 +439,8 @@ const Chapter2 = {
         {
           type: 'puzzle',
           id: 'usb_password',
-          question: 'USBメモリのパスワード',
+          question: 'USBメモリのパスワード\n（数字1つを入力）',
+          placeholder: '数字を入力',
           clues: [
             '数列: 1, 1, 2, 3, 5, ?',
             '次の数字を入力せよ',
@@ -562,6 +565,7 @@ const Chapter2 = {
       time: '日曜日 23:30',
       bg: 'bg-night-street',
       content: [
+        { type: 'flag', key: 'met_noguchi', value: true },
         { type: 'narration', text: '佐藤の電話を切り、息を吐く。\n考えることが多すぎる。\n\n気分転換にコンビニまで歩くことにした。' },
         { type: 'narration', text: '夜の住宅街。\n自分の足音だけが響く静かな道。' },
         { type: 'narration', text: '……いや。\n足音がもう一つある。' },

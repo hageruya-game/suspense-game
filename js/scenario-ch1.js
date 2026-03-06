@@ -65,6 +65,7 @@ const Chapter1 = {
       bg: 'bg-night-street',
       showTransition: false,
       content: [
+        { type: 'flag', key: 'met_tenin', value: true },
         { type: 'narration', text: '20分が過ぎた。田中は来ない。' },
         { type: 'text', speaker: '店員', text: 'お連れ様は…？\nお席、もう少しお待ちになりますか？' },
         { type: 'narration', text: '一人で軽く飲んで、帰ることにした。\n\n田中に何かあったのだろうか。\n胸の奥に小さな不安が残った。' },
@@ -250,6 +251,7 @@ const Chapter1 = {
       time: '土曜日 12:00',
       bg: 'bg-interrogation',
       content: [
+        { type: 'flag', key: 'met_kuroda', value: true },
         { type: 'narration', text: 'どの道を選んでも\nこの男と会うことは避けられなかった。' },
         { type: 'narration', text: '捜査一課の刑事、黒田。' },
         { type: 'text', speaker: '黒田', text: '突然すみません。捜査一課の黒田です。\n{position}の{name}さんですね。\n田中洋介さんについてお話を伺いたい。' },

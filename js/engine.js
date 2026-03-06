@@ -38,7 +38,7 @@ const Engine = {
     this.clearChoices();
     // Close overlays
     document.querySelectorAll('.active').forEach(el => {
-      if (el.id === 'phone-overlay' || el.id === 'puzzle-overlay' || el.id === 'evidence-overlay' || el.id === 'chapter-title-overlay') {
+      if (el.id === 'phone-overlay' || el.id === 'puzzle-overlay' || el.id === 'evidence-overlay' || el.id === 'characters-overlay' || el.id === 'chapter-title-overlay') {
         el.classList.remove('active');
       }
     });
@@ -749,6 +749,7 @@ const Engine = {
     hintEl.textContent = '';
     hintEl.style.display = 'none';
     inputEl.value = '';
+    inputEl.placeholder = puzzleData.placeholder || '答えを入力';
     attemptsEl.textContent = '';
     feedbackEl.textContent = '';
     feedbackEl.className = 'puzzle-feedback';
@@ -884,6 +885,151 @@ const Engine = {
     const cleanup = () => {
       inputEl.removeEventListener('keydown', onKeydown);
     };
+  },
+
+  // ----- CHARACTER FILES -----
+  showCharacterFiles() {
+    const overlay = document.getElementById('characters-overlay');
+    const grid = document.getElementById('characters-grid');
+    const listView = document.getElementById('characters-list-view');
+    const detailView = document.getElementById('characters-detail-view');
+
+    grid.innerHTML = '';
+    listView.style.display = '';
+    detailView.style.display = 'none';
+
+    if (typeof CHARACTER_PROFILES === 'undefined') return;
+
+    for (const [key, profile] of Object.entries(CHARACTER_PROFILES)) {
+      const unlocked = this._checkCharUnlockCondition(profile.unlockCondition);
+
+      const card = document.createElement('div');
+      card.className = 'char-card' + (unlocked ? '' : ' locked');
+
+      const icon = document.createElement('div');
+      icon.className = 'char-icon';
+      icon.textContent = unlocked ? profile.icon : '？';
+
+      const info = document.createElement('div');
+      info.className = 'char-card-info';
+
+      const name = document.createElement('div');
+      name.className = 'char-card-name';
+      name.textContent = unlocked ? profile.name : '？？？';
+
+      const role = document.createElement('div');
+      role.className = 'char-card-role';
+      role.textContent = unlocked ? profile.baseInfo.role : '';
+
+      info.appendChild(name);
+      info.appendChild(role);
+
+      if (unlocked) {
+        const status = this._getCharacterStatus(profile);
+        if (status) {
+          const badge = document.createElement('div');
+          badge.className = 'char-status-badge ' + this._getStatusClass(status);
+          badge.textContent = status;
+          info.appendChild(badge);
+        }
+      }
+
+      card.appendChild(icon);
+      card.appendChild(info);
+
+      if (unlocked) {
+        card.addEventListener('click', () => this._showCharacterDetail(key, profile));
+      }
+
+      grid.appendChild(card);
+    }
+
+    overlay.classList.add('active');
+  },
+
+  _checkCharUnlockCondition(condition) {
+    if (!condition) return false;
+    if (condition.always) return true;
+    if (condition.flag) return !!this.state.flags[condition.flag];
+    if (condition.evidence) return !!this.state.evidence.find(e => e.id === condition.evidence);
+    return false;
+  },
+
+  _getCharacterStatus(profile) {
+    if (!profile.statusUpdates) return null;
+    let status = null;
+    for (const su of profile.statusUpdates) {
+      if (this._checkCharUnlockCondition(su.condition)) {
+        status = su.status;
+      }
+    }
+    return status;
+  },
+
+  _getStatusClass(status) {
+    if (status === '死亡') return 'status-dead';
+    if (status === '捜査中') return 'status-investigating';
+    if (status.includes('容疑者')) return 'status-suspect';
+    if (status.includes('逮捕')) return 'status-arrested';
+    if (status.includes('起訴')) return 'status-convicted';
+    if (status === '味方') return 'status-ally';
+    if (status.includes('アリバイ確認')) return 'status-cleared';
+    if (status === '関係者') return 'status-related';
+    if (status === '情報源') return 'status-info';
+    if (status === '一般人') return 'status-civilian';
+    if (status === '事件解決') return 'status-resolved';
+    if (status === '要注意人物') return 'status-suspect';
+    return 'status-related';
+  },
+
+  _showCharacterDetail(key, profile) {
+    const listView = document.getElementById('characters-list-view');
+    const detailView = document.getElementById('characters-detail-view');
+    const headerEl = document.getElementById('char-detail-header');
+    const infoEl = document.getElementById('char-detail-info');
+    const updatesEl = document.getElementById('char-detail-updates');
+
+    listView.style.display = 'none';
+    detailView.style.display = '';
+
+    // Header
+    const status = this._getCharacterStatus(profile);
+    headerEl.innerHTML = `
+      <div class="char-detail-icon">${profile.icon}</div>
+      <div class="char-detail-name-block">
+        <h4>${profile.name}</h4>
+        <div class="char-reading">${profile.nameReading}</div>
+        ${status ? `<div class="char-status-badge ${this._getStatusClass(status)}">${status}</div>` : ''}
+      </div>
+    `;
+
+    // Base info
+    const desc = this.replacePlaceholders(profile.baseInfo.description);
+    infoEl.innerHTML = `
+      <div class="char-info-row"><span class="char-info-label">役割</span><span class="char-info-value">${profile.baseInfo.role}</span></div>
+      <div class="char-info-row"><span class="char-info-label">関係</span><span class="char-info-value">${profile.baseInfo.relation}</span></div>
+      <div class="char-description">${desc}</div>
+    `;
+
+    // Updates
+    updatesEl.innerHTML = '';
+    if (profile.updates) {
+      for (const update of profile.updates) {
+        if (this._checkCharUnlockCondition(update.condition)) {
+          const card = document.createElement('div');
+          card.className = 'char-update-card';
+          card.innerHTML = `
+            <div class="char-update-tag">${update.tag || '情報'}</div>
+            <div class="char-update-text">${update.info}</div>
+          `;
+          updatesEl.appendChild(card);
+        }
+      }
+    }
+
+    if (updatesEl.children.length === 0) {
+      updatesEl.innerHTML = '<div style="color:#666; font-size:0.85rem; text-align:center; padding:0.5rem;">追加情報なし</div>';
+    }
   },
 
   // ----- RANK EVALUATION -----

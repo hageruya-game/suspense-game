@@ -130,6 +130,7 @@
         <button id="btn-save" class="menu-btn">セーブ</button>
         <button id="btn-load" class="menu-btn">ロード</button>
         <button id="btn-evidence" class="menu-btn">証拠ボード</button>
+        <button id="btn-characters" class="menu-btn">人物ファイル</button>
         <button id="btn-back-title" class="menu-btn">タイトルへ</button>
         <button id="btn-close-menu" class="menu-btn">閉じる</button>
       </div>
@@ -141,6 +142,23 @@
         <h3>証拠ボード</h3>
         <div id="evidence-list"></div>
         <button id="btn-close-evidence" class="menu-btn">閉じる</button>
+      </div>
+    </div>
+
+    <!-- 人物ファイル -->
+    <div id="characters-overlay" class="overlay">
+      <div class="characters-panel">
+        <div id="characters-list-view">
+          <h3>人物ファイル</h3>
+          <div id="characters-grid"></div>
+          <button id="btn-close-characters" class="menu-btn">閉じる</button>
+        </div>
+        <div id="characters-detail-view" style="display:none;">
+          <button id="btn-back-to-list" class="char-back-btn">&larr; 一覧に戻る</button>
+          <div id="char-detail-header"></div>
+          <div id="char-detail-info"></div>
+          <div id="char-detail-updates"></div>
+        </div>
       </div>
     </div>
 
@@ -206,6 +224,7 @@
 
   <script src="js/sfx.js"></script>
   <script src="js/save.js"></script>
+  <script src="js/characters.js"></script>
   <script src="js/engine.js"></script>
   <script src="js/action.js"></script>
   <script src="js/scenario-ch1.js"></script>
