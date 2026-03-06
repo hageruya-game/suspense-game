@@ -31,6 +31,19 @@ const Engine = {
     Object.assign(this.scenes, sceneMap);
   },
 
+  // ----- RESET UI STATE -----
+  resetUI() {
+    clearInterval(this.typeTimer);
+    this.isTyping = false;
+    this.clearChoices();
+    // Close overlays
+    document.querySelectorAll('.active').forEach(el => {
+      if (el.id === 'phone-overlay' || el.id === 'puzzle-overlay' || el.id === 'evidence-overlay' || el.id === 'chapter-title-overlay') {
+        el.classList.remove('active');
+      }
+    });
+  },
+
   // ----- SCENE PLAYBACK -----
   playScene(sceneId) {
     const scene = this.scenes[sceneId];
@@ -67,6 +80,11 @@ const Engine = {
   },
 
   _startScene(scene) {
+    // Increment retry count for game-over scenes
+    if (scene.gameover) {
+      this.state.retryCount = (this.state.retryCount || 0) + 1;
+    }
+
     // Update header
     if (scene.location) {
       document.getElementById('scene-location').textContent = scene.location;
@@ -180,6 +198,9 @@ const Engine = {
         this.playScene(scene.next);
       } else if (scene.action) {
         this.startAction(scene.action);
+      } else {
+        // No next scene — stop ambient and return to title
+        if (typeof SFX !== 'undefined') SFX.stopAmbient();
       }
       return;
     }
@@ -344,6 +365,12 @@ const Engine = {
       return this.checkCondition(c.condition);
     });
 
+    // Fallback: if all choices filtered out, use last choice
+    if (available.length === 0) {
+      console.warn('All choices filtered out, using last choice as fallback');
+      available.push(choices[choices.length - 1]);
+    }
+
     // Timer bar
     if (timeLimit) {
       const timerDiv = document.createElement('div');
@@ -503,17 +530,17 @@ const Engine = {
     document.getElementById('screen-game').appendChild(notif);
     if (typeof SFX !== 'undefined') SFX.notification();
 
-    notif.addEventListener('click', () => {
-      notif.remove();
-    });
-
-    setTimeout(() => {
-      if (notif.parentNode) {
-        notif.remove();
-      }
+    let advanced = false;
+    const advance = () => {
+      if (advanced) return;
+      advanced = true;
+      if (notif.parentNode) notif.remove();
       this.currentTextIndex++;
       this.processNext();
-    }, 3000);
+    };
+
+    notif.addEventListener('click', advance);
+    setTimeout(advance, 3000);
   },
 
   // ----- EFFECTS -----
@@ -753,22 +780,37 @@ const Engine = {
       }
     };
 
+    let solved = false;
+
+    const normalizeInput = (str) => {
+      // Full-width alphanumeric → half-width
+      str = str.replace(/[Ａ-Ｚａ-ｚ０-９]/g, ch =>
+        String.fromCharCode(ch.charCodeAt(0) - 0xFEE0)
+      );
+      // Full-width space → half-width
+      str = str.replace(/　/g, ' ');
+      return str.toLowerCase().replace(/\s/g, '');
+    };
+
     const onSubmit = () => {
+      if (solved) return;
       const answer = inputEl.value.trim();
       if (!answer) return;
       attempts++;
       attemptsEl.textContent = `試行回数: ${attempts}`;
 
       // Normalize answer for comparison
-      const normalizedAnswer = answer.toLowerCase().replace(/\s/g, '');
+      const normalizedAnswer = normalizeInput(answer);
       const correctAnswers = Array.isArray(puzzleData.answer) ? puzzleData.answer : [puzzleData.answer];
       const isCorrect = correctAnswers.some(a =>
-        String(a).toLowerCase().replace(/\s/g, '') === normalizedAnswer
+        normalizeInput(String(a)) === normalizedAnswer
       );
 
       if (isCorrect) {
+        solved = true;
         feedbackEl.textContent = '正解！';
         feedbackEl.className = 'puzzle-feedback correct';
+        inputEl.disabled = true;
         if (typeof SFX !== 'undefined') SFX.success();
 
         // Record result
@@ -792,6 +834,7 @@ const Engine = {
         // Clean up and advance
         setTimeout(() => {
           cleanup();
+          inputEl.disabled = false;
           overlay.classList.remove('active');
           this.currentTextIndex++;
           this.processNext();

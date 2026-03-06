@@ -43,6 +43,7 @@ const Chapter3 = {
       time: '月曜日 8:05',
       bg: 'bg-interrogation',
       showTransition: false,
+      gameover: true,
       content: [
         { type: 'text', speaker: '黒田', text: '{name}さん。\n田中洋介さん殺害の容疑で\n話を聞かせてもらいたい。' },
         { type: 'narration', text: '黒田の後ろに、制服警官が2人。' },
@@ -389,7 +390,7 @@ const Chapter3 = {
             '送信は毎回ちょうど正時（自動送信の特徴）',
             '最初の送信は田中の死後',
           ],
-          answer: ['田中の旧スマホ', '田中のスマホ', '田中の古いスマホ', 'たなかのスマホ', '田中のきゅうスマホ'],
+          answer: ['田中の旧スマホ', '田中のスマホ', '田中の古いスマホ', 'たなかのスマホ', '田中のきゅうスマホ', 'たなかのきゅうスマホ', '田中の旧すまほ', '田中のふるいスマホ', '田中のスマートフォン', 'たなかの旧スマホ', '旧スマホ', 'きゅうスマホ', '田中の携帯', 'たなかのけいたい', '田中のきゅうけいたい', '田中の旧携帯'],
           hints: [
             'TY = Tanaka Yosuke。OLDは「旧い」という意味',
             '田中が生前にセットした自動送信システムでは？',
@@ -562,6 +563,7 @@ const Chapter3 = {
       time: '月曜日 20:30',
       bg: 'bg-night-danger',
       showTransition: false,
+      gameover: true,
       content: [
         { type: 'narration', text: '誰も来ない。\n助けは来なかった。' },
         { type: 'text', speaker: '佐藤', text: '余計なものを見たお前が悪い。\n田中と同じだ。' },

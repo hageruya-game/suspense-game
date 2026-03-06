@@ -38,6 +38,7 @@ const App = {
       const state = SaveManager.load();
       if (state) {
         Engine.state = state;
+        Engine.resetUI();
         this.showScreen('screen-game');
         Engine.playScene(state.currentScene);
       }
@@ -85,6 +86,7 @@ const App = {
       const state = SaveManager.load();
       if (state) {
         Engine.state = state;
+        Engine.resetUI();
         document.getElementById('game-menu').classList.remove('active');
         Engine.playScene(state.currentScene);
         this.showToast('ロードしました');
@@ -109,6 +111,7 @@ const App = {
       const state = SaveManager.load();
       if (state) {
         Engine.state = state;
+        Engine.resetUI();
         this.showScreen('screen-game');
         Engine.playScene(state.currentScene);
       } else {
