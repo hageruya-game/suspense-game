@@ -286,7 +286,7 @@ const Chapter6 = {
       showTransition: false,
       content: [
         { type: 'text', speaker: '{name}', text: '火曜日の夕方。\n非常階段で電話してたろ。' },
-        { type: 'text', speaker: '{name}', text: '「処理する」「高橋が嗅ぎ回ってる」\n「俺のところまでは来てない」\n\n全部聞いてた。' },
+        { type: 'text', speaker: '{name}', text: '「処理する」「{name}が嗅ぎ回ってる」\n「俺のところまでは来てない」\n\n全部聞いてた。' },
         { type: 'effect', name: 'shake' },
         { type: 'sfx', name: 'tensionSting' },
         { type: 'text', speaker: '鈴木', text: '……！\nあの時、お前が……' },
@@ -328,7 +328,7 @@ const Chapter6 = {
         { type: 'narration', text: '鈴木の目に涙が光っている。\nだが同情はできない。' },
         { type: 'text', speaker: '鈴木', text: '俺は……田中は親友だった。\n本当に。でも……\n追い詰められて……' },
         { type: 'text', speaker: '{name}', text: '……それで田中を。' },
-        { type: 'text', speaker: '鈴木', text: '金曜の夜。田中を居酒屋に誘った。\nお前との約束より先に、俺が田中に会った。\nそして……' },
+        { type: 'text', speaker: '鈴木', text: '金曜の夜。田中を呼び出した。\nお前との約束より先に、俺が田中の部屋で会った。\nそして……' },
         { type: 'narration', text: '鈴木が両手で顔を覆った。' },
         { type: 'text', speaker: '鈴木', text: '偽造メッセージもスマホの細工も\n全部俺がやった。\n佐藤に命令されて。\nお前を犯人に仕立てるために。' },
         { type: 'narration', text: '鈴木の全てが嘘だった。\n親友のふり。味方のふり。\nその裏で、田中を殺し\n自分に罪を着せようとしていた。' },

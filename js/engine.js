@@ -482,7 +482,7 @@ const Engine = {
 
       if (isSystem) {
         wrapper.className = 'chat-msg system';
-        wrapper.textContent = msg.text;
+        wrapper.textContent = this.replacePlaceholders(msg.text);
       } else {
         wrapper.className = 'chat-row ' + (isSent ? 'chat-row-sent' : 'chat-row-received');
 
@@ -495,7 +495,7 @@ const Engine = {
         // Message bubble
         const bubble = document.createElement('div');
         bubble.className = 'chat-msg ' + (isSent ? 'sent' : 'received');
-        bubble.textContent = msg.text;
+        bubble.textContent = this.replacePlaceholders(msg.text);
         if (msg.time) {
           const timeSpan = document.createElement('div');
           timeSpan.className = 'chat-time';

@@ -738,6 +738,14 @@ const Chapter1 = {
         { type: 'narration', text: '何者かが口封じに来た。' },
         { type: 'narration', text: '一つだけわかったことがある。\nこれは偶然じゃない。\n誰かが計画的にやっている。' },
         { type: 'narration', text: 'そして、田中が相談しようとしていた「何か」。\nそれが全ての鍵だ。' },
+        { type: 'sfx', name: 'notification' },
+        {
+          type: 'notification',
+          title: '匿名メッセージ',
+          text: 'お前は嵌められている',
+        },
+        { type: 'narration', text: '匿名メッセージ──？\n知らない番号からだ。\n「お前は嵌められている」……' },
+        { type: 'narration', text: '誰が送ってきた。\n味方なのか、敵なのか。\n\nわからない。\nだが、この言葉は正しい。' },
         {
           type: 'phone',
           appName: 'メッセージ',

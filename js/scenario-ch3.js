@@ -400,7 +400,7 @@ const Chapter3 = {
           params: { investigation: 2 },
         },
         { type: 'narration', text: '田中の旧スマホ。\n田中は自分が危険にさらされていることを\n知っていた。' },
-        { type: 'narration', text: 'だから古いスマホに\n自動メッセージを仕込んでいた。\n\n48時間ごとのチェックインが\n途絶えたら、自動的に警告を送る──\nデッドマンスイッチだ。' },
+        { type: 'narration', text: 'だから古いスマホに\n自動メッセージを仕込んでいた。\n\n毎日のチェックインが\n途絶えたら、自動的に警告を送る──\nデッドマンスイッチだ。' },
         {
           type: 'evidence',
           id: 'anonymous_sender_trace',
