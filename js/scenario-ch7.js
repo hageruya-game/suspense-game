@@ -160,6 +160,7 @@ const Chapter7 = {
         { type: 'narration', text: 'あの一週間。\n疑われ、脅され、追われた日々。\n\n自分は負けなかった。\n真実を掴み取った。' },
         { type: 'narration', text: '田中はもういない。\n鈴木ももういない。\n\nだが真実は明らかになった。\n田中の無念は晴らされた。' },
         { type: 'narration', text: '\n\n── 容疑者X ──\n\n　　　　　完' },
+        { type: 'narration', text: '秘密のキーワード:\n\nHAGERUYA BANZAI' },
       ],
       choices: [
         {
