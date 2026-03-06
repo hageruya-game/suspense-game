@@ -15,6 +15,18 @@ const App = {
     if (typeof Chapter3 !== 'undefined') {
       Engine.registerScenes(Chapter3.scenes);
     }
+    if (typeof Chapter4 !== 'undefined') {
+      Engine.registerScenes(Chapter4.scenes);
+    }
+    if (typeof Chapter5 !== 'undefined') {
+      Engine.registerScenes(Chapter5.scenes);
+    }
+    if (typeof Chapter6 !== 'undefined') {
+      Engine.registerScenes(Chapter6.scenes);
+    }
+    if (typeof Chapter7 !== 'undefined') {
+      Engine.registerScenes(Chapter7.scenes);
+    }
   },
 
   bindUI() {

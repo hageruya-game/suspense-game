@@ -566,24 +566,48 @@ const Engine = {
 
     // All possible evidence
     const allEvidence = [
+      // Ch1
       { id: 'fake_message', name: '偽造されたLINEメッセージ' },
+      { id: 'convenience_receipt', name: 'コンビニのレシート' },
+      { id: 'non_caller', name: '非通知着信の記録' },
+      { id: 'threat_message', name: '差出人不明の脅迫メッセージ' },
+      { id: 'tanaka_sns', name: '田中のSNS投稿の異変' },
+      { id: 'chase_perfume', name: '追手の香水の匂い' },
+      { id: 'noguchi_sighting', name: '野口の目撃情報' },
+      { id: 'tanaka_mystery_woman', name: '田中と謎の女性との連絡' },
+      // Ch2
+      { id: 'yamamoto_testimony', name: '山本の証言' },
       { id: 'tanaka_trouble', name: '田中が「会社でやばいこと」を発見した証言' },
       { id: 'usb_memory', name: 'USBメモリ「sato_keiri_2024」' },
-      { id: 'intruder_watch', name: '侵入者の高級腕時計の目撃' },
-      { id: 'intruder_button', name: '高級スーツのボタン' },
-      { id: 'car_number', name: '脅迫者の車のナンバー写真' },
       { id: 'thursday_dinner', name: '田中と佐藤の木曜の食事' },
+      { id: 'intruder_watch', name: '侵入者の高級腕時計の目撃' },
       { id: 'suzuki_witness', name: '鈴木の目撃証言' },
-      { id: 'kuroda_info', name: '黒田からの捜査情報' },
-      { id: 'threat_message', name: '差出人不明の脅迫メッセージ' },
-      { id: 'yamamoto_testimony', name: '山本の証言' },
-      { id: 'tanaka_sns', name: '田中のSNS投稿の異変' },
-      { id: 'non_caller', name: '非通知着信の記録' },
-      { id: 'chase_perfume', name: '追手の香水の匂い' },
-      { id: 'convenience_receipt', name: 'コンビニのレシート' },
       { id: 'sato_embezzlement', name: '佐藤の横領データ' },
       { id: 'sato_call_record', name: '佐藤との通話録音' },
+      { id: 'noguchi_threat_email', name: '野口から田中への脅迫メール' },
+      { id: 'noguchi_witness', name: '野口の目撃証言: スーツの男' },
+      // Ch3
+      { id: 'kuroda_info', name: '黒田からの捜査情報' },
+      { id: 'nakamura_testimony', name: '中村の証言' },
+      { id: 'nakamura_key', name: '中村が持っていた田中の部屋の鍵' },
+      { id: 'anonymous_sender_trace', name: '匿名メッセージの発信元' },
       { id: 'sato_confession', name: '佐藤の自白録音' },
+      // Ch4
+      { id: 'shimizu_info', name: '清水太郎の情報: 鈴木の借金' },
+      { id: 'noguchi_alibi_confirmed', name: '野口のアリバイ確認' },
+      { id: 'suzuki_suspicious_call', name: '鈴木の不審な電話' },
+      { id: 'nakamura_alibi_confirmed', name: '中村のアリバイ確認' },
+      { id: 'bar_lighter', name: '追手が落としたライター: BAR K' },
+      // Ch5
+      { id: 'tanaka_coded_memo', name: '田中の暗号メモ' },
+      { id: 'tanaka_dead_switch', name: '田中のデッドマンスイッチ' },
+      { id: 'bar_k_testimony', name: 'BAR Kの店主の証言' },
+      { id: 'suzuki_sato_calls', name: '鈴木と佐藤の通話記録' },
+      // Ch6
+      { id: 'suzuki_confession', name: '鈴木の自白録音' },
+      // Ch7
+      { id: 'anonymous_sender_revealed', name: '匿名メッセージの真の送信者' },
+      { id: 'tanaka_last_letter', name: '田中の最後の手紙' },
     ];
 
     allEvidence.forEach(ev => {
@@ -826,7 +850,7 @@ const Engine = {
 
     // 1. パズル正解率 (max 25 points)
     const puzzleIds = Object.keys(this.state.puzzleResults);
-    const totalPuzzles = 3;
+    const totalPuzzles = 5;
     let puzzleScore = 0;
     if (puzzleIds.length > 0) {
       puzzleIds.forEach(id => {
@@ -854,7 +878,7 @@ const Engine = {
     score += hintBonus;
 
     // 3. 証拠収集数 (max 25 points)
-    const totalEvidence = 18;
+    const totalEvidence = 35;
     const collected = this.state.evidence.length;
     const evidenceScore = Math.round((collected / totalEvidence) * 25);
     details.evidence = { score: evidenceScore, max: 25, label: `証拠収集 (${collected}/${totalEvidence})` };
@@ -862,18 +886,16 @@ const Engine = {
 
     // 4. 重要場面の判断力 (max 20 points)
     let decisionScore = 0;
-    let decisionTotal = 0;
-    // Chase: escaped successfully?
-    if (this.state.flags.ch1_chase_result === 'success') { decisionScore += 7; }
-    else if (this.state.flags.ch1_chase_result === 'fail') { decisionScore += 3; }
-    decisionTotal += 7;
-    // Stealth: succeeded?
-    if (this.state.flags.stealth_success) { decisionScore += 7; }
-    decisionTotal += 7;
-    // Confrontation: got confession?
-    if (this.state.flags.qte_success) { decisionScore += 6; }
-    decisionTotal += 6;
-    details.action = { score: decisionScore, max: 20, label: `判断力 (${decisionScore}/${decisionTotal})` };
+    // Ch1 chase
+    if (this.state.flags.ch1_chase_result === 'success') { decisionScore += 5; }
+    else if (this.state.flags.ch1_chase_result === 'fail') { decisionScore += 2; }
+    // Ch2 stealth
+    if (this.state.flags.stealth_success) { decisionScore += 5; }
+    // Ch4 night attack
+    if (this.state.flags.ch4_attack_survived) { decisionScore += 5; }
+    // Ch6 confrontation
+    if (this.state.flags.ch6_suzuki_caught) { decisionScore += 5; }
+    details.action = { score: decisionScore, max: 20, label: `判断力 (${decisionScore}/20)` };
     score += decisionScore;
 
     // 5. BAD END回避 (max 10 points)
@@ -884,9 +906,11 @@ const Engine = {
 
     // 6. 重要選択ボーナス (max 10 points)
     let choiceScore = 0;
-    if (this.state.flags.ch2_scene4_choice === 'record') choiceScore += 4;
-    if (this.state.flags.kuroda_has_evidence) choiceScore += 3;
-    if (this.state.flags.yamamoto_ally) choiceScore += 3;
+    if (this.state.flags.ch2_scene4_choice === 'record') choiceScore += 2;
+    if (this.state.flags.kuroda_has_evidence) choiceScore += 2;
+    if (this.state.flags.yamamoto_ally) choiceScore += 2;
+    if (this.state.flags.suzuki_call_overheard) choiceScore += 2;
+    if (this.state.flags.ch6_evidence_perfect) choiceScore += 2;
     details.choices = { score: choiceScore, max: 10, label: '重要選択の質' };
     score += choiceScore;
 
