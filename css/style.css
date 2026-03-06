@@ -952,6 +952,15 @@ body {
   animation: shake 0.4s ease-in-out;
 }
 
+.puzzle-quit-btn {
+  margin-top: 0.5rem;
+  min-width: auto;
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  border-color: #666;
+  color: #888;
+}
+
 /* ========== RANK SCREEN ========== */
 #screen-rank {
   background: linear-gradient(180deg, #0a0a1a 0%, #0f0a18 50%, #0a0a1a 100%);

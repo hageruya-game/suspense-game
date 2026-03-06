@@ -802,6 +802,18 @@ const Engine = {
 
     inputEl.addEventListener('keydown', onKeydown);
 
+    // Quit button
+    const quitBtn = document.getElementById('puzzle-quit');
+    const newQuitBtn = quitBtn.cloneNode(true);
+    quitBtn.parentNode.replaceChild(newQuitBtn, quitBtn);
+    newQuitBtn.addEventListener('click', () => {
+      cleanup();
+      overlay.classList.remove('active');
+      if (typeof SFX !== 'undefined') SFX.stopAmbient();
+      App.showScreen('screen-title');
+      App.checkContinue();
+    });
+
     const cleanup = () => {
       inputEl.removeEventListener('keydown', onKeydown);
     };
